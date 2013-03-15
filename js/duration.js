@@ -192,6 +192,17 @@ var Duration = function(representation) {
 		return self.seconds / self.SECONDS_IN_A_YEAR;
 	}
 
+	/* Arithmetic */
+
+	self.add = function(other) {
+		console.log("Add: " + self.seconds + " + " + other.seconds);
+		return new Duration(self.seconds + other.inSeconds());
+	}
+
+	self.subtract = function(other) {
+		return new Duration(self.seconds - other.inSeconds());
+	}
+
 	/* Formatted getters */
 
 	self.ago = function() {
@@ -201,18 +212,5 @@ var Duration = function(representation) {
 	}
 
 	self.inFormat = function(format) {
-	}
-
-	/* Arithmetic */
-
-	self.add = function(other) {
-		console.log("Add: " + self.seconds + " + " + other.seconds);
-		self.seconds += other.inSeconds();
-		return self;
-	}
-
-	self.subtract = function(other) {
-		self.seconds -= other.inSeconds();
-		return self;
 	}
 }
