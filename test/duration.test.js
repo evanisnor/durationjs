@@ -138,6 +138,13 @@ describe('Duration Test Suite', function() {
 				+ (60 * 61) // 61 Minutes
 				+ 61); // 61 Seconds
 
+			expect((new Duration("P45Y8M2DT574H7021M4S")).seconds).toBe(
+				(60 * 60 * 24 * 365 * 45) // 45 Years
+				+ (60 * 60 * 24 * 7 * 4 * 8) // 8 Months
+				+ (60 * 60 * 24 * 2) // 2 Days
+				+ (60 * 60 * 574) // 574 Hours
+				+ (60 * 7021) // 7021 Minutes
+				+ 4); // 4 Seconds
 		});
 
 		it("should parse P#W format", function() {
@@ -404,29 +411,6 @@ describe('Duration Test Suite', function() {
 		});
 	});
 
-	describe('Duration Formatted Getter Tests', function() {
-		
-		beforeEach(function() {
-
-		});
-
-		afterEach(function() {
-
-		});
-		
-		it("should return a formatted duration as specified", function() {
-
-		});
-		
-		it("should return a formatted duration in terms of how long ago something was", function() {
-
-		});
-		
-		it("should return a formatted duration in terms of how long something has been occurring", function() {
-
-		});
-	});
-
 	describe('Duration Arithmetic Tests', function() {
 		
 		beforeEach(function() {
@@ -454,6 +438,104 @@ describe('Duration Test Suite', function() {
 			expect(((new Duration("P2D")).subtract(new Duration("P1D"))).seconds).toBe(60 * 60 * 24);
 			expect(((new Duration("PT13H")).subtract(new Duration("PT1H"))).seconds).toBe((60 * 60 * 13) - (60 * 60));
 			expect(((new Duration("PT5M")).subtract(new Duration("PT10S"))).seconds).toBe((60 * 5) - 10);
+		});
+	});
+
+	describe('Duration Formatted Getter Tests', function() {
+		
+		beforeEach(function() {
+
+		});
+
+		afterEach(function() {
+
+		});
+		
+		it("should return a formatted duration in approximate terms of how long ago something was", function() {
+			expect((new Duration(0).ago())).toBe('just now');
+			expect((new Duration('PT0S').ago())).toBe('just now');
+
+			expect((new Duration(1).ago())).toBe('1 second ago');
+			expect((new Duration('PT1S').ago())).toBe('1 second ago');
+			for (var seconds = 2; seconds < 60; seconds++) {
+				expect((new Duration(seconds).ago())).toBe(seconds + ' seconds ago');
+				expect((new Duration('PT' + seconds + 'S').ago())).toBe(seconds + ' seconds ago');
+			}
+
+			expect((new Duration(60).ago())).toBe('1 minute ago');
+			expect((new Duration('PT1M').ago())).toBe('1 minute ago');
+			expect((new Duration('PT60S').ago())).toBe('1 minute ago');
+			for (var minutes = 2; minutes < 60; minutes++) {
+				expect((new Duration(minutes * 60).ago())).toBe(minutes + ' minutes ago');
+				expect((new Duration('PT' + minutes + 'M').ago())).toBe(minutes + ' minutes ago');
+			}
+
+			expect((new Duration(60 * 60).ago())).toBe('1 hour ago');
+			expect((new Duration('PT1H').ago())).toBe('1 hour ago');
+			expect((new Duration('PT60M').ago())).toBe('1 hour ago');
+			for (var hours = 2; hours < 24; hours++) {
+				expect((new Duration(hours * 60 * 60).ago())).toBe(hours + ' hours ago');
+				expect((new Duration('PT' + hours + 'H').ago())).toBe(hours + ' hours ago');
+			}
+
+			expect((new Duration(60 * 60 * 24).ago())).toBe('1 day ago');
+			expect((new Duration('P1D').ago())).toBe('1 day ago');
+			expect((new Duration('PT24H').ago())).toBe('1 day ago');
+			for (var days = 2; days < 7; days++) {
+				expect((new Duration(days * 60 * 60 * 24).ago())).toBe(days + ' days ago');
+				expect((new Duration('P' + days + 'D').ago())).toBe(days + ' days ago');
+			}
+
+			expect((new Duration(60 * 60 * 24 * 7).ago())).toBe('1 week ago');
+			expect((new Duration('P1W').ago())).toBe('1 week ago');
+			expect((new Duration('P7D').ago())).toBe('1 week ago');
+			for (var weeks = 2; weeks < 4; weeks++) {
+				expect((new Duration(weeks * 60 * 60 * 24 * 7).ago())).toBe(weeks + ' weeks ago');
+				expect((new Duration('P' + weeks + 'W').ago())).toBe(weeks + ' weeks ago');
+			}
+
+			expect((new Duration(60 * 60 * 24 * 7 * 4).ago())).toBe('1 month ago');
+			expect((new Duration('P1M').ago())).toBe('1 month ago');
+			expect((new Duration('P4W').ago())).toBe('1 month ago');
+			for (var months = 2; months < 12; months++) {
+				expect((new Duration(months * 60 * 60 * 24 * 7 * 4).ago())).toBe(months + ' months ago');
+				expect((new Duration('P' + months + 'M').ago())).toBe(months + ' months ago');
+			}
+
+			expect((new Duration(60 * 60 * 24 * 365).ago())).toBe('1 year ago');
+			expect((new Duration('P1Y').ago())).toBe('1 year ago');
+			expect((new Duration('P12M').ago())).toBe('1 year ago');
+			for (var years = 2; years <= 50; years++) {
+				expect((new Duration(years * 60 * 60 * 24 * 365).ago())).toBe(years + ' years ago');
+				expect((new Duration('P' + years + 'Y').ago())).toBe(years + ' years ago');
+			}
+		});
+		
+		it("should return a formatted duration in terms of how much time is remaining", function() {
+			expect(new Duration().remaining()).toBe("0:00");
+
+			// TRIPLE-NESTED LOOP... ACTIVATE!
+			// This kills the browser.
+			for (var hours = 0; hours < 2; hours++) {
+				for (var minutes = 0; minutes < 60; minutes++) {
+					for (var seconds = 0; seconds < 60; seconds++) {
+
+						var formattedString;
+						if (hours == 0) {
+							formattedString = sprintf('%d:%2d', minutes, seconds);
+						}
+						else {
+							formattedString = sprintf('%d:%2d:%2d', hours, minutes, seconds);
+						}
+
+						expect(new Duration(seconds + (minutes * 60) + (hours * 60 * 24)).remaining())
+							.toBe(formattedString);
+						expect(new Duration('PT' + hours + 'H' + minutes + 'M' + seconds + 'S').remaining())
+							.toBe(formattedString);
+					}
+				}
+			}
+
 		});
 	});
 });

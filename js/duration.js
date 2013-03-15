@@ -2,7 +2,7 @@
 
 var Duration = function(representation) {
 	var self = this;
-	
+
 	/* Fields */
 
 	self.seconds = 0;
@@ -195,12 +195,10 @@ var Duration = function(representation) {
 	/* Arithmetic */
 
 	self.add = function(other) {
-		// console.log("Add: " + self.seconds + " + " + other.seconds);
 		return new Duration(self.seconds + other.seconds);
 	}
 
 	self.subtract = function(other) {
-		// console.log("Subtract: " + self.seconds + " - " + other.seconds);
 		return new Duration(self.seconds - other.seconds);
 	}
 
@@ -210,8 +208,5 @@ var Duration = function(representation) {
 	}
 
 	self.remaining = function() {
-	}
-
-	self.inFormat = function(format) {
 	}
 }

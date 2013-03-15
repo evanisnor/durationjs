@@ -10,15 +10,15 @@ Features
 	*  PYYYY-MM-DDTHH:MM:SS
 	*  PYYYYMMDDTHHMMSS
 *  Basic arithmetic for adding and subtracting durations
-*  Formatted output strings (not yet implemented)
+*  Formatted output strings (work in progress)
 
 
 Usage
 -----------------------------
-In order to make use of duration.js, you must include the following javascript files to your environment in this order:
+To make use of duration.js you must include the following javascript files to your environment in this order:
 
-*  [sprintf-0.7-beta1.js](blob/master/js/vendor/sprintf-0.7-beta1.js)
-*  [duration.js](blob/master/js/duration.js)
+*  [sprintf-0.7-beta1.js](js/vendor/sprintf-0.7-beta1.js)
+*  [duration.js](js/duration.js)
 
 Initialization:
 
@@ -27,6 +27,7 @@ Initialization:
 		new Duration('P10Y'); // 10 years
 		new Duration('P1YT5H'); // 1 year 5 minutes
 		new Duration('PT2S'); // 2 seconds
+		new Duration('P45Y8M2DT574H7021M4S'); // 45 years, 8 minutes, 2 days, 574 hours, 7021 minutes and 4 seconds
 		new Duration('P0010-00-00T00:00:00') // 10 years
 		new Duration('P0001-00-00T05:00:00') // 1 year 5 minutes
 
