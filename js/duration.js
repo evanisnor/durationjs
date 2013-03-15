@@ -1,8 +1,8 @@
 'use strict';
 
 var Duration = function(representation) {
-	self = this;
-
+	var self = this;
+	
 	/* Fields */
 
 	self.seconds = 0;
@@ -37,14 +37,14 @@ var Duration = function(representation) {
 					self.seconds += parseInt(value.replace('W', '')) * self.SECONDS_IN_A_WEEK;
 				}
 				else if (/\d+[A-Z]/.test(value)) {
-					console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+					console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 					throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 				}
 			}
 		}
 		else if (pattern === self.SUPPORTED_FORMAT.NO_MODULI) {
 			if (match[0] === 'P' || match[0] === 'PT') {
-				console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+				console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 				throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 			}
 			
@@ -73,7 +73,7 @@ var Duration = function(representation) {
 					self.seconds += parseInt(value.replace('S', ''));
 				}
 				else if (/\d+[A-Z]/.test(value)) {
-					console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+					console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 					throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 				}
 			}
@@ -88,35 +88,35 @@ var Duration = function(representation) {
 				}
 				else if (groupIndex === 2) {
 					if (value > 12) {
-						console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * self.SECONDS_IN_A_MONTH;
 				}
 				else if (groupIndex === 3) {
 					if (value > 31) {
-						console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * self.SECONDS_IN_A_DAY;
 				}
 				else if (groupIndex === 4) {
 					if (value > 24) {
-						console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * self.SECONDS_IN_AN_HOUR;
 				}
 				else if (groupIndex === 5) {
 					if (value > 60) {
-						console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * self.SECONDS_IN_A_MINUTE;
 				}
 				else if (groupIndex === 6) {
 					if (value > 60) {
-						console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value;
@@ -132,11 +132,11 @@ var Duration = function(representation) {
 	}
 	
 	if (typeof representation === 'number' && representation % 1 != 0) {
-		console.log("Throwing UNEXPECTED_FLOAT_ERROR");
+		console.log("Duration.js: Error: UNEXPECTED_FLOAT_ERROR");
 		throw new Error(self.UNEXPECTED_FLOAT_ERROR);
 	}
 	else if (typeof representation === 'number' && representation < 0) {
-		console.log("Throwing NEGATIVE_VALUE_ERROR");
+		console.log("Duration.js: Error: NEGATIVE_VALUE_ERROR");
 		throw new Error(self.NEGATIVE_VALUE_ERROR);
 	}
 	else if (typeof representation === 'number' && representation % 1 == 0) {
@@ -149,7 +149,7 @@ var Duration = function(representation) {
 				var pattern = self.SUPPORTED_FORMAT[format];
 				if (pattern.test(representation)) {
 					isSupportedFormat = true;
-					console.log(format + ": " + representation);
+					// console.log(format + ": " + representation);
 					self.parse(pattern, representation.match(pattern));
 					break;
 				}
@@ -157,7 +157,7 @@ var Duration = function(representation) {
 		}
 
 		if (!isSupportedFormat) {
-			console.log("Throwing UNEXPECTED_FORMAT_ERROR");
+			console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 			throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 		}
 	}
@@ -195,12 +195,13 @@ var Duration = function(representation) {
 	/* Arithmetic */
 
 	self.add = function(other) {
-		console.log("Add: " + self.seconds + " + " + other.seconds);
-		return new Duration(self.seconds + other.inSeconds());
+		// console.log("Add: " + self.seconds + " + " + other.seconds);
+		return new Duration(self.seconds + other.seconds);
 	}
 
 	self.subtract = function(other) {
-		return new Duration(self.seconds - other.inSeconds());
+		// console.log("Subtract: " + self.seconds + " - " + other.seconds);
+		return new Duration(self.seconds - other.seconds);
 	}
 
 	/* Formatted getters */

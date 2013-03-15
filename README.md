@@ -10,7 +10,7 @@ Features
 	*  PYYYY-MM-DDTHH:MM:SS
 	*  PYYYYMMDDTHHMMSS
 *  Basic arithmetic for adding and subtracting durations
-*  Formatted output strings (currently in progress)
+*  Formatted output strings (not yet implemented)
 
 
 Usage
@@ -44,22 +44,22 @@ Cumulative Getters:
 
 Arithmetic:
 
-		var 10sec = new Duration("PT10S");
-		var 5sec = new Duration("PT5S");
-		var 15sec = 10sec.add(5sec); // New Duration object
+		var d_10sec = new Duration("PT10S");
+		var d_5sec = new Duration("PT5S");
+		var d_15sec = d_10sec.add(d_5sec); // New Duration object
 
-		var 2days = new Duration("P2D");
-		var 1day = new Duration("P1D");
-		var 3days = 2days.add(1day); // New Duration object
+		var d_2days = new Duration("P2D");
+		var d_1day = new Duration("P1D");
+		var d_3days = d_2days.add(d_1day); // New Duration object
 
-		var 4years = new Duration("P4Y");
-		var 2months = new Duration("P2M");
-		var 4years2months = 4years.add(2months); // New Duration object
+		var d_4years = new Duration("P4Y");
+		var d_2months = new Duration("P2M");
+		var d_4years2months = d_4years.add(d_2months); // New Duration object
 
-		var 3hours = new Duration("PT3H");
-		var 1hour = new Duration("PT1H");
-		var 2hours = 3hours.subtract(1hour); // New Duration object
+		var d_3hours = new Duration("PT3H");
+		var d_1hour = new Duration("PT1H");
+		var d_2hours = d_3hours.subtract(d_1hour); // New Duration object
 
-		var 5mins = new Duration("PT5M");
-		var 10sec = new Duration("PT10S");
-		var 4min50sec = 5mins.subtract(10sec); // New Duration object
+		var d_5mins = new Duration("PT5M");
+		var d_10sec = new Duration("PT10S");
+		var d_4min50sec = d_5mins.subtract(d_10sec); // New Duration object
