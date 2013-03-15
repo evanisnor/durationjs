@@ -1,4 +1,14 @@
 'use strict';
+/*
+duration.js
+A JavaScript library for parsing and handling ISO 8601 formatted duration strings.
+
+Licensed under The MIT License (MIT)
+
+Authors:
+	Evan W. Isnor
+	<your name here>
+*/
 
 var Duration = function(representation) {
 	var self = this;
