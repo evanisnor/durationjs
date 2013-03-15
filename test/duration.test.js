@@ -292,32 +292,26 @@ describe('Duration Test Suite', function() {
 		
 		it("should know how many seconds are in a minute", function() {
 			expect(duration.SECONDS_IN_A_MINUTE).toBe(60);
-			// expect(Duration.SECONDS_IN_A_MINUTE).toBe(60);
 		});
 		
 		it("should know how many seconds are in an hour", function() {
 			expect(duration.SECONDS_IN_AN_HOUR).toBe(60 * 60);
-			// expect(Duration.SECONDS_IN_AN_HOUR).toBe(60 * 60);
 		});
 		
 		it("should know how many seconds are in a day", function() {
 			expect(duration.SECONDS_IN_A_DAY).toBe(60 * 60 * 24);
-			// expect(Duration.SECONDS_IN_A_DAY).toBe(60 * 60 * 24);
 		});
 		
 		it("should know how many seconds are in a week", function() {
 			expect(duration.SECONDS_IN_A_WEEK).toBe(60 * 60 * 24 * 7);
-			// expect(Duration.SECONDS_IN_A_WEEK).toBe(60 * 60 * 24 * 7);
 		});
 		
 		it("should know how many seconds are in a month", function() {
 			expect(duration.SECONDS_IN_A_MONTH).toBe(60 * 60 * 24 * 7 * 4);
-			// expect(Duration.SECONDS_IN_A_MONTH).toBe(60 * 60 * 24 * 7 * 4);
 		});
 		
 		it("should know how many seconds are in a year", function() {
-			expect(duration.SECONDS_IN_A_YEAR).toBe(60 * 60 * 24 * 356);
-			// expect(Duration.SECONDS_IN_A_YEAR).toBe(60 * 60 * 24 * 356);
+			expect(duration.SECONDS_IN_A_YEAR).toBe(60 * 60 * 24 * 365);
 		});
 	});
 
@@ -444,14 +438,13 @@ describe('Duration Test Suite', function() {
 		});
 		
 		it("should add various other durations", function() {
-			console.log('-------------- Add 1 + 1');
 			expect(((new Duration(1)).add(new Duration(1))).seconds).toBe(2);
-			console.log('-------------- Add PT1S + 1');
 			expect(((new Duration("PT1S")).add(new Duration(1))).seconds).toBe(2);
-			console.log('-------------- Add PT1M + 1');
 			expect(((new Duration('PT1M')).add(new Duration(1))).seconds).toBe(61);
-			console.log('-------------- Add PT1M + P2D');
 			expect(((new Duration("PT1M")).add(new Duration("P2D"))).seconds).toBe(60 + (60 * 60 * 24 * 2));
+			expect(((new Duration('PT10S')).add(new Duration("PT5S"))).seconds).toBe(15);
+			expect(((new Duration('P2D')).add(new Duration("P1D"))).seconds).toBe(60 * 60 * 24 * 3);
+			expect(((new Duration('P4Y')).add(new Duration("P2M"))).seconds).toBe((60 * 60 * 24 * 365 * 4) + (60 * 60 * 24 * 7 * 4 * 2));
 		});
 		
 		it("should subtract various other durations", function() {
@@ -459,6 +452,8 @@ describe('Duration Test Suite', function() {
 			expect(((new Duration("PT1S")).subtract(new Duration(1))).seconds).toBe(0);
 			expect(((new Duration("PT1M")).subtract(new Duration(1))).seconds).toBe(59);
 			expect(((new Duration("P2D")).subtract(new Duration("P1D"))).seconds).toBe(60 * 60 * 24);
+			expect(((new Duration("PT13H")).subtract(new Duration("PT1H"))).seconds).toBe((60 * 60 * 13) - (60 * 60));
+			expect(((new Duration("PT5M")).subtract(new Duration("PT10S"))).seconds).toBe((60 * 5) - 10);
 		});
 	});
 });
