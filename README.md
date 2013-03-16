@@ -79,12 +79,20 @@ Running the Unit Tests
 -----------------------------
 Unit tests are written using the [Jasmine](http://pivotal.github.com/jasmine/) framework. You can run them however you like, but I use [Testacular](http://testacular.github.com/). If you would like to do the same, follow these steps:
 
-1.  Install node.js
+1.  Install [node.js](http://nodejs.org/)
+
 2.  Install the [Testacular node.js module](https://npmjs.org/package/testacular)
-	npm install testacular
+
+		npm install testacular
+		
 3.  Install the [Jasmine node.js module](https://npmjs.org/package/jasmine-node)
-	npm install testacular
+
+		npm install testacular
+
 4.  Browse to your cloned repository directory and start Testacular
-	testacular start duration.testacular.conf.js
+
+		testacular start duration.testacular.conf.js
+
 5.  Open a web browser (or a few) to the URL printed in your console. Probably http://localhost:9876
+
 6.  Watch as Testacular evaluates the tests in the /test directory that have file names matching '*.test.js'. This evaulation will execute automatically the next time you save your file modifications.
