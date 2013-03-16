@@ -27,8 +27,8 @@ var Duration = function(representation) {
 	self.SECONDS_IN_A_YEAR = self.SECONDS_IN_A_DAY * 365;
 
 	self.UNEXPECTED_FORMAT_ERROR = "Unexpected duration format. Refer to ISO 8601.";
-	self.UNEXPECTED_FLOAT_ERROR = "Unexpected duration format. Try passing in an Integer or an ISO 8601 Duration string instead.";
-	self.NEGATIVE_VALUE_ERROR = "Cannot create a negative Duration.";
+	self.UNEXPECTED_FLOAT_ERROR = "Unexpected duration format. Try passing in an integer or an ISO 8601 duration string instead.";
+	self.NEGATIVE_VALUE_ERROR = "Cannot create a negative duration.";
 
 	/* Parsing */
 
@@ -47,14 +47,14 @@ var Duration = function(representation) {
 					self.seconds += parseInt(value.replace('W', '')) * self.SECONDS_IN_A_WEEK;
 				}
 				else if (/\d+[A-Z]/.test(value)) {
-					console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+					console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 					throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 				}
 			}
 		}
 		else if (pattern === self.SUPPORTED_FORMAT.NO_MODULI) {
 			if (match[0] === 'P' || match[0] === 'PT') {
-				console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+				console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 				throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 			}
 			
@@ -83,7 +83,7 @@ var Duration = function(representation) {
 					self.seconds += parseInt(value.replace('S', ''));
 				}
 				else if (/\d+[A-Z]/.test(value)) {
-					console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+					console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 					throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 				}
 			}
@@ -98,35 +98,35 @@ var Duration = function(representation) {
 				}
 				else if (groupIndex === 2) {
 					if (value > 12) {
-						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * self.SECONDS_IN_A_MONTH;
 				}
 				else if (groupIndex === 3) {
 					if (value > 31) {
-						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * self.SECONDS_IN_A_DAY;
 				}
 				else if (groupIndex === 4) {
 					if (value > 24) {
-						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * self.SECONDS_IN_AN_HOUR;
 				}
 				else if (groupIndex === 5) {
 					if (value > 60) {
-						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * self.SECONDS_IN_A_MINUTE;
 				}
 				else if (groupIndex === 6) {
 					if (value > 60) {
-						console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value;
@@ -142,11 +142,11 @@ var Duration = function(representation) {
 	}
 	
 	if (typeof representation === 'number' && representation % 1 != 0) {
-		console.log("Duration.js: Error: UNEXPECTED_FLOAT_ERROR");
+		console.log("duration.js: Error: UNEXPECTED_FLOAT_ERROR");
 		throw new Error(self.UNEXPECTED_FLOAT_ERROR);
 	}
 	else if (typeof representation === 'number' && representation < 0) {
-		console.log("Duration.js: Error: NEGATIVE_VALUE_ERROR");
+		console.log("duration.js: Error: NEGATIVE_VALUE_ERROR");
 		throw new Error(self.NEGATIVE_VALUE_ERROR);
 	}
 	else if (typeof representation === 'number' && representation % 1 == 0) {
@@ -167,7 +167,7 @@ var Duration = function(representation) {
 		}
 
 		if (!isSupportedFormat) {
-			console.log("Duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+			console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 			throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 		}
 	}
@@ -252,5 +252,21 @@ var Duration = function(representation) {
 		else {
 			return hours + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
 		}
+	}
+
+	self.formatNoModuli = function() {
+		return '';
+	}
+
+	self.formatNoModuliWeeks = function() {
+		return '';
+	}
+
+	self.formatModuliDelimited = function() {
+		return '';
+	}
+
+	self.formatModuliNonDelimited = function() {
+		return '';
 	}
 }

@@ -511,7 +511,7 @@ describe('Duration Test Suite', function() {
 		});
 		
 		it("should return a formatted duration in terms of how much time is remaining", function() {
-			expect(new Duration().remaining()).toBe("0:00");
+			expect((new Duration()).remaining()).toBe("0:00");
 
 			// TRIPLE-NESTED LOOP... ACTIVATE!
 			// This kills the browser.
@@ -527,14 +527,21 @@ describe('Duration Test Suite', function() {
 							formattedString = hours + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
 						}
 
-						expect(new Duration((hours * 60 * 60) + (minutes * 60) + seconds).remaining())
+						expect((new Duration((hours * 60 * 60) + (minutes * 60) + seconds)).remaining())
 							.toBe(formattedString);
-						expect(new Duration('PT' + hours + 'H' + minutes + 'M' + seconds + 'S').remaining())
+						expect((new Duration('PT' + hours + 'H' + minutes + 'M' + seconds + 'S')).remaining())
 							.toBe(formattedString);
 					}
 				}
 			}
 
+		});
+		
+		it("should return a valid ISO 8601 duration string", function() {
+			expect((new Duration('P1Y1M1DT1H1M1S')).formatNoModuli()).toBe('P1Y1M1DT1H1M1S');
+			expect((new Duration('P1Y1M1DT1H1M1S')).formatNoModuliWeeks()).toBe('P56W');
+			expect((new Duration('P1Y1M1DT1H1M1S')).formatModuliDelimited()).toBe('P0001-01-01T01:01:01');
+			expect((new Duration('P1Y1M1DT1H1M1S')).formatModuliNonDelimited()).toBe('P00010101T010101');
 		});
 	});
 });

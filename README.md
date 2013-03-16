@@ -15,12 +15,12 @@ Features
 
 Usage
 -----------------------------
-To make use of duration.js you must include the following javascript files to your environment in this order:
+To make use of duration.js you must reference the [duration.js](js/duration.js) file in your environment before you execute code that utilizes the Duration object. Probably like this:
 
-*  [sprintf-0.7-beta1.js](js/vendor/sprintf-0.7-beta1.js)
-*  [duration.js](js/duration.js)
+		<script src="duration.js" />
+		<script src="myscript.js" />
 
-Initialization:
+Instantiation:
 
 		new Duration(); // 0 seconds
 		new Duration('P2W'); // 2 weeks
