@@ -215,8 +215,42 @@ var Duration = function(representation) {
 	/* Formatted getters */
 
 	self.ago = function() {
+		if (self.seconds == 0) {
+			return 'just now';
+		}
+		else if (self.seconds < self.SECONDS_IN_A_MINUTE) {
+			return self.seconds + ' second' + ((self.seconds > 1) ? 's' : '') + ' ago';
+		}
+		else if (self.seconds < self.SECONDS_IN_AN_HOUR) {
+			return Math.floor(self.inMinutes()) + ' minute' + ((self.inMinutes() > 1) ? 's' : '') + ' ago';
+		}
+		else if (self.seconds < self.SECONDS_IN_A_DAY) {
+			return Math.floor(self.inHours()) + ' hour' + ((self.inHours() > 1) ? 's' : '') + ' ago';
+		}
+		else if (self.seconds < self.SECONDS_IN_A_WEEK) {
+			return Math.floor(self.inDays()) + ' day' + ((self.inDays() > 1) ? 's' : '') + ' ago';
+		}
+		else if (self.seconds < self.SECONDS_IN_A_MONTH) {
+			return Math.floor(self.inWeeks()) + ' week' + ((self.inWeeks() > 1) ? 's' : '') + ' ago';
+		}
+		else if (self.seconds < self.SECONDS_IN_A_YEAR) {
+			return Math.floor(self.inMonths()) + ' month' + ((self.inMonths() > 1) ? 's' : '') + ' ago';
+		}
+		else {
+			return Math.floor(self.inYears()) + ' year' + ((self.inYears() > 1) ? 's' : '') + ' ago';
+		}
 	}
 
 	self.remaining = function() {
+		var hours = Math.floor(self.seconds / 3600) % 24;
+		var minutes = Math.floor(self.seconds / 60) % 60;
+		var seconds = self.seconds % 60;
+
+		if (hours == 0) {
+			return minutes + ':' + ((seconds < 10) ? '0' + seconds : seconds);
+		}
+		else {
+			return hours + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
+		}
 	}
 }

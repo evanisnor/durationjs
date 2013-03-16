@@ -504,7 +504,6 @@ describe('Duration Test Suite', function() {
 
 			expect((new Duration(60 * 60 * 24 * 365).ago())).toBe('1 year ago');
 			expect((new Duration('P1Y').ago())).toBe('1 year ago');
-			expect((new Duration('P12M').ago())).toBe('1 year ago');
 			for (var years = 2; years <= 50; years++) {
 				expect((new Duration(years * 60 * 60 * 24 * 365).ago())).toBe(years + ' years ago');
 				expect((new Duration('P' + years + 'Y').ago())).toBe(years + ' years ago');
@@ -522,13 +521,13 @@ describe('Duration Test Suite', function() {
 
 						var formattedString;
 						if (hours == 0) {
-							formattedString = sprintf('%d:%2d', minutes, seconds);
+							formattedString = minutes + ':' + ((seconds < 10) ? '0' + seconds : seconds);
 						}
 						else {
-							formattedString = sprintf('%d:%2d:%2d', hours, minutes, seconds);
+							formattedString = hours + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
 						}
 
-						expect(new Duration(seconds + (minutes * 60) + (hours * 60 * 24)).remaining())
+						expect(new Duration((hours * 60 * 60) + (minutes * 60) + seconds).remaining())
 							.toBe(formattedString);
 						expect(new Duration('PT' + hours + 'H' + minutes + 'M' + seconds + 'S').remaining())
 							.toBe(formattedString);
