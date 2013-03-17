@@ -94,17 +94,15 @@ Unit tests are written using the [Jasmine](http://pivotal.github.com/jasmine/) f
 
 1.  Install [node.js](http://nodejs.org/)
 
-2.  Install the [Testacular node.js module](https://npmjs.org/package/testacular)
+2.  Install the [Testacular node.js module](https://npmjs.org/package/testacular) and [Jasmine node.js module](https://npmjs.org/package/jasmine-node)
 
-		npm install testacular
-		
-3.  Install the [Jasmine node.js module](https://npmjs.org/package/jasmine-node)
-
-		npm install testacular
+		npm install -d
 
 4.  Browse to your cloned repository directory and start Testacular
 
-		testacular start duration.testacular.conf.js
+	testacular start duration.testacular.conf.js
+or
+	npm test
 
 5.  Open a web browser (or a few) to the URL printed in your console. Probably http://localhost:9876
 
