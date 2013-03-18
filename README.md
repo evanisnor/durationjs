@@ -87,7 +87,7 @@ If you feel a burning desire to contribute to this project you may do so with so
 
 *  Write unit tests if you add features
 *  If you add files update the testacular config to include them
-*  Ensure your Pull Requests target develop as their destination
+*  Work out of the develop branch and ensure your Pull Requests target develop as their destination
 
 
 Running the Unit Tests
@@ -102,9 +102,11 @@ Unit tests are written using the [Jasmine](http://pivotal.github.com/jasmine/) f
 
 4.  Browse to your cloned repository directory and start Testacular
 
-	testacular start duration.testacular.conf.js
-or
-	npm test
+		testacular start duration.testacular.conf.js
+
+	or
+	
+		npm test
 
 5.  Open a web browser (or a few) to the URL printed in your console. Probably http://localhost:9876
 
