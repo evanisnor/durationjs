@@ -54,6 +54,23 @@ var Calendar = {
 	}
 };
 
+/*
+Use this instead of parseInt() for parsing integers from strings. This prevents Firefox
+from interpreting '00x' as octal x.
+*/
+var parseIntBase10 = function(string) {
+	if (/^[0]*$/.test(string)) {
+		return 0;
+	}
+
+	var match = string.match(/^0*(\d*)$/);
+	if (match.length < 2) {
+		console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
+		throw new Error(self.UNEXPECTED_FORMAT_ERROR);
+	}
+	return parseInt(match[1]);
+}
+
 var Duration = function(representation) {
 	var self = this;
 
@@ -81,7 +98,7 @@ var Duration = function(representation) {
 			for (var i = 1; i < match.length; i++) {
 				var value = match[i];
 				if (/\d+W/.test(value)) {
-					self.seconds += parseInt(value.replace('W', '')) * Calendar.Seconds.per.Week;
+					self.seconds += parseIntBase10(value.replace('W', '')) * Calendar.Seconds.per.Week;
 				}
 				else if (/\d+[A-Z]/.test(value)) {
 					console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
@@ -102,22 +119,22 @@ var Duration = function(representation) {
 					hasFoundT = true;
 				}
 				else if (/\d+Y/.test(value)) {
-					self.seconds += parseInt(value.replace('Y', '')) * Calendar.Seconds.per.Year;
+					self.seconds += parseIntBase10(value.replace('Y', '')) * Calendar.Seconds.per.Year;
 				}
 				else if (/\d+M/.test(value) && !hasFoundT) {
-					self.seconds += parseInt(value.replace('M', '')) * Calendar.Seconds.per.Month;
+					self.seconds += parseIntBase10(value.replace('M', '')) * Calendar.Seconds.per.Month;
 				}
 				else if (/\d+D/.test(value)) {
-					self.seconds += parseInt(value.replace('D', '')) * Calendar.Seconds.per.Day;
+					self.seconds += parseIntBase10(value.replace('D', '')) * Calendar.Seconds.per.Day;
 				}
 				else if (/\d+H/.test(value)) {
-					self.seconds += parseInt(value.replace('H', '')) * Calendar.Seconds.per.Hour;
+					self.seconds += parseIntBase10(value.replace('H', '')) * Calendar.Seconds.per.Hour;
 				}
 				else if (/\d+M/.test(value) && hasFoundT) {
-					self.seconds += parseInt(value.replace('M', '')) * Calendar.Seconds.per.Minute;
+					self.seconds += parseIntBase10(value.replace('M', '')) * Calendar.Seconds.per.Minute;
 				}
 				else if (/\d+S/.test(value)) {
-					self.seconds += parseInt(value.replace('S', ''));
+					self.seconds += parseIntBase10(value.replace('S', ''));
 				}
 				else if (/\d+[A-Z]/.test(value)) {
 					console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
@@ -129,12 +146,12 @@ var Duration = function(representation) {
 			|| pattern === self.SUPPORTED_FORMAT.MODULI_NONDELIMITED) {
 			
 			for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
-				var value = parseInt(match[groupIndex]);
+				var value = parseIntBase10(match[groupIndex]);
 				if (groupIndex === 1) {
 					self.seconds += value * Calendar.Seconds.per.Year;
 				}
 				else if (groupIndex === 2) {
-					if (value > 12) {
+					if (value >= 12) {
 						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
@@ -148,21 +165,21 @@ var Duration = function(representation) {
 					self.seconds += value * Calendar.Seconds.per.Day;
 				}
 				else if (groupIndex === 4) {
-					if (value > 24) {
+					if (value >= 24) {
 						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * Calendar.Seconds.per.Hour;
 				}
 				else if (groupIndex === 5) {
-					if (value > 60) {
+					if (value >= 60) {
 						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
 					self.seconds += value * Calendar.Seconds.per.Minute;
 				}
 				else if (groupIndex === 6) {
-					if (value > 60) {
+					if (value >= 60) {
 						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
@@ -192,7 +209,6 @@ var Duration = function(representation) {
 				var pattern = self.SUPPORTED_FORMAT[format];
 				if (pattern.test(representation)) {
 					isSupportedFormat = true;
-					// console.log(format + ": " + representation);
 					self.parse(pattern, representation.match(pattern));
 					break;
 				}
