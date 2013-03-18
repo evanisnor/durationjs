@@ -1,14 +1,58 @@
 'use strict';
 /*
 duration.js
-A JavaScript library for parsing and handling ISO 8601 formatted duration strings.
+A JavaScript library for parsing and manipulating ISO 8601 formatted duration strings.
 
 Licensed under The MIT License (MIT)
-
-Authors:
-	Evan W. Isnor
-	<your name here>
 */
+
+var Calendar = {
+	Seconds : {
+		per : {
+			Minute : 60,
+			Hour : 60 * 60,
+			Day : 60 * 60 * 24,
+			Week : 60 * 60 * 24 * 7,
+			Month : 60 * 60 * 24 * 30.4368,
+			Year : 60 * 60 * 24 * 365.242
+		}
+	},
+	Minutes : {
+		per : {
+			Hour : 60,
+			Day : 60 * 24,
+			Week : 60 * 24 * 7,
+			Month : 60 * 24 * 30.4368,
+			Year : 60 * 24 * 365.242
+		}
+	},
+	Hours : {
+		per : {
+			Day : 24,
+			Week : 24 * 7,
+			Month : 24 * 30.4368,
+			Year : 24 * 365.242
+		}
+	},
+	Days : {
+		per : {
+			Week : 7,
+			Month : 30.4368,
+			Year : 365.242
+		}
+	},
+	Weeks : {
+		per : { 
+			Month : 4.34812,
+			Year : 52.1775
+		}
+	},
+	Months : {
+		per : {
+			Year : 12
+		}
+	}
+};
 
 var Duration = function(representation) {
 	var self = this;
@@ -17,18 +61,11 @@ var Duration = function(representation) {
 
 	self.seconds = 0;
 
-	/* Constants */
-
-	self.SECONDS_IN_A_MINUTE = 60;
-	self.SECONDS_IN_AN_HOUR = self.SECONDS_IN_A_MINUTE * 60;
-	self.SECONDS_IN_A_DAY = self.SECONDS_IN_AN_HOUR * 24;
-	self.SECONDS_IN_A_WEEK = self.SECONDS_IN_A_DAY * 7;
-	self.SECONDS_IN_A_MONTH = self.SECONDS_IN_A_WEEK * 4;
-	self.SECONDS_IN_A_YEAR = self.SECONDS_IN_A_DAY * 365;
+	/* Error Messages */
 
 	self.UNEXPECTED_FORMAT_ERROR = "Unexpected duration format. Refer to ISO 8601.";
-	self.UNEXPECTED_FLOAT_ERROR = "Unexpected duration format. Try passing in an integer or an ISO 8601 duration string instead.";
 	self.NEGATIVE_VALUE_ERROR = "Cannot create a negative duration.";
+	self.OVERFLOW_ERROR = "Cannot represent a duration that large. Float overflow.";
 
 	/* Parsing */
 
@@ -44,7 +81,7 @@ var Duration = function(representation) {
 			for (var i = 1; i < match.length; i++) {
 				var value = match[i];
 				if (/\d+W/.test(value)) {
-					self.seconds += parseInt(value.replace('W', '')) * self.SECONDS_IN_A_WEEK;
+					self.seconds += parseInt(value.replace('W', '')) * Calendar.Seconds.per.Week;
 				}
 				else if (/\d+[A-Z]/.test(value)) {
 					console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
@@ -65,19 +102,19 @@ var Duration = function(representation) {
 					hasFoundT = true;
 				}
 				else if (/\d+Y/.test(value)) {
-					self.seconds += parseInt(value.replace('Y', '')) * self.SECONDS_IN_A_YEAR;
+					self.seconds += parseInt(value.replace('Y', '')) * Calendar.Seconds.per.Year;
 				}
 				else if (/\d+M/.test(value) && !hasFoundT) {
-					self.seconds += parseInt(value.replace('M', '')) * self.SECONDS_IN_A_MONTH;
+					self.seconds += parseInt(value.replace('M', '')) * Calendar.Seconds.per.Month;
 				}
 				else if (/\d+D/.test(value)) {
-					self.seconds += parseInt(value.replace('D', '')) * self.SECONDS_IN_A_DAY;
+					self.seconds += parseInt(value.replace('D', '')) * Calendar.Seconds.per.Day;
 				}
 				else if (/\d+H/.test(value)) {
-					self.seconds += parseInt(value.replace('H', '')) * self.SECONDS_IN_AN_HOUR;
+					self.seconds += parseInt(value.replace('H', '')) * Calendar.Seconds.per.Hour;
 				}
 				else if (/\d+M/.test(value) && hasFoundT) {
-					self.seconds += parseInt(value.replace('M', '')) * self.SECONDS_IN_A_MINUTE;
+					self.seconds += parseInt(value.replace('M', '')) * Calendar.Seconds.per.Minute;
 				}
 				else if (/\d+S/.test(value)) {
 					self.seconds += parseInt(value.replace('S', ''));
@@ -94,35 +131,35 @@ var Duration = function(representation) {
 			for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
 				var value = parseInt(match[groupIndex]);
 				if (groupIndex === 1) {
-					self.seconds += value * self.SECONDS_IN_A_YEAR;
+					self.seconds += value * Calendar.Seconds.per.Year;
 				}
 				else if (groupIndex === 2) {
 					if (value > 12) {
 						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
-					self.seconds += value * self.SECONDS_IN_A_MONTH;
+					self.seconds += value * Calendar.Seconds.per.Month;
 				}
 				else if (groupIndex === 3) {
 					if (value > 31) {
 						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
-					self.seconds += value * self.SECONDS_IN_A_DAY;
+					self.seconds += value * Calendar.Seconds.per.Day;
 				}
 				else if (groupIndex === 4) {
 					if (value > 24) {
 						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
-					self.seconds += value * self.SECONDS_IN_AN_HOUR;
+					self.seconds += value * Calendar.Seconds.per.Hour;
 				}
 				else if (groupIndex === 5) {
 					if (value > 60) {
 						console.log("duration.js: Error: UNEXPECTED_FORMAT_ERROR");
 						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
 					}
-					self.seconds += value * self.SECONDS_IN_A_MINUTE;
+					self.seconds += value * Calendar.Seconds.per.Minute;
 				}
 				else if (groupIndex === 6) {
 					if (value > 60) {
@@ -141,15 +178,11 @@ var Duration = function(representation) {
 		representation = 0;
 	}
 	
-	if (typeof representation === 'number' && representation % 1 != 0) {
-		console.log("duration.js: Error: UNEXPECTED_FLOAT_ERROR");
-		throw new Error(self.UNEXPECTED_FLOAT_ERROR);
-	}
-	else if (typeof representation === 'number' && representation < 0) {
+	if (typeof representation === 'number' && representation < 0) {
 		console.log("duration.js: Error: NEGATIVE_VALUE_ERROR");
 		throw new Error(self.NEGATIVE_VALUE_ERROR);
 	}
-	else if (typeof representation === 'number' && representation % 1 == 0) {
+	else if (typeof representation === 'number') {
 		self.seconds = representation;
 	}
 	else {
@@ -172,6 +205,12 @@ var Duration = function(representation) {
 		}
 	}
 
+	if (self.seconds == NaN) {
+		console.log("duration.js: Error: OVERFLOW_ERROR");
+		throw new Error(self.OVERFLOW_ERROR);
+
+	}
+
 	/* Cumulative getters */
 
 	self.inSeconds = function() {
@@ -179,27 +218,27 @@ var Duration = function(representation) {
 	}
 
 	self.inMinutes = function() {
-		return self.seconds / self.SECONDS_IN_A_MINUTE;
+		return self.seconds / Calendar.Seconds.per.Minute;
 	}
 
 	self.inHours = function() {
-		return self.seconds / self.SECONDS_IN_AN_HOUR;
+		return self.seconds / Calendar.Seconds.per.Hour;
 	}
 
 	self.inDays = function() {
-		return self.seconds / self.SECONDS_IN_A_DAY;
+		return self.seconds / Calendar.Seconds.per.Day;
 	}
 
 	self.inWeeks = function() {
-		return self.seconds / self.SECONDS_IN_A_WEEK;
+		return self.seconds / Calendar.Seconds.per.Week;
 	}
 
 	self.inMonths = function() {
-		return self.seconds / self.SECONDS_IN_A_MONTH;
+		return self.seconds / Calendar.Seconds.per.Month;
 	}
 
 	self.inYears = function() {
-		return self.seconds / self.SECONDS_IN_A_YEAR;
+		return self.seconds / Calendar.Seconds.per.Year;
 	}
 
 	/* Arithmetic */
@@ -218,22 +257,22 @@ var Duration = function(representation) {
 		if (self.seconds == 0) {
 			return 'just now';
 		}
-		else if (self.seconds < self.SECONDS_IN_A_MINUTE) {
+		else if (self.seconds < Calendar.Seconds.per.Minute) {
 			return self.seconds + ' second' + ((self.seconds > 1) ? 's' : '') + ' ago';
 		}
-		else if (self.seconds < self.SECONDS_IN_AN_HOUR) {
+		else if (self.seconds < Calendar.Seconds.per.Hour) {
 			return Math.floor(self.inMinutes()) + ' minute' + ((self.inMinutes() > 1) ? 's' : '') + ' ago';
 		}
-		else if (self.seconds < self.SECONDS_IN_A_DAY) {
+		else if (self.seconds < Calendar.Seconds.per.Day) {
 			return Math.floor(self.inHours()) + ' hour' + ((self.inHours() > 1) ? 's' : '') + ' ago';
 		}
-		else if (self.seconds < self.SECONDS_IN_A_WEEK) {
+		else if (self.seconds < Calendar.Seconds.per.Week) {
 			return Math.floor(self.inDays()) + ' day' + ((self.inDays() > 1) ? 's' : '') + ' ago';
 		}
-		else if (self.seconds < self.SECONDS_IN_A_MONTH) {
+		else if (self.seconds < Calendar.Seconds.per.Month) {
 			return Math.floor(self.inWeeks()) + ' week' + ((self.inWeeks() > 1) ? 's' : '') + ' ago';
 		}
-		else if (self.seconds < self.SECONDS_IN_A_YEAR) {
+		else if (self.seconds < Calendar.Seconds.per.Year) {
 			return Math.floor(self.inMonths()) + ' month' + ((self.inMonths() > 1) ? 's' : '') + ' ago';
 		}
 		else {

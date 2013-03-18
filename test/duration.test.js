@@ -33,55 +33,55 @@ describe('Duration Test Suite', function() {
 		
 		it("should parse P#Y#M#DT#H#M#S format", function() {
 			expect((new Duration("P1Y1M1DT1H1M1S")).seconds).toBe(
-				(60 * 60 * 24 * 365) // Year
-				+ (60 * 60 * 24 * 7 * 4) // Month
+				(60 * 60 * 24 * 365.242) // Year
+				+ (60 * 60 * 24 * 30.4368) // Month
 				+ (60 * 60 * 24) // Day
 				+ (60 * 60) // Hour
 				+ (60) // Minute
 				+ 1); // 1 Second
 
 			expect((new Duration("P10Y10M10DT10H10M10S")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 10) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 10) // 10 Months
+				(60 * 60 * 24 * 365.242 * 10) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 10) // 10 Months
 				+ (60 * 60 * 24 * 10) // 10 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 10) // 10 Minutes
 				+ 10); // 10 Seconds
 
 			expect((new Duration("P2Y2M2DT2H2M")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 2) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 2) // 10 Months
+				(60 * 60 * 24 * 365.242 * 2) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 2) // 10 Months
 				+ (60 * 60 * 24 * 2) // 10 Days
 				+ (60 * 60 * 2) // 10 Hours
 				+ (60 * 2)); // 10 Minutes
 
 			expect((new Duration("P2Y2M2DT2H2M")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 2) // 2 Years
-				+ (60 * 60 * 24 * 7 * 4 * 2) // 2 Months
+				(60 * 60 * 24 * 365.242 * 2) // 2 Years
+				+ (60 * 60 * 24 * 30.4368 * 2) // 2 Months
 				+ (60 * 60 * 24 * 2) // 2 Days
 				+ (60 * 60 * 2) // 2 Hours
 				+ (60 * 2)); // 2 Minutes
 
 			expect((new Duration("P3Y3M3DT3H")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 3) // 3 Years
-				+ (60 * 60 * 24 * 7 * 4 * 3) // 3 Months
+				(60 * 60 * 24 * 365.242 * 3) // 3 Years
+				+ (60 * 60 * 24 * 30.4368 * 3) // 3 Months
 				+ (60 * 60 * 24 * 3) // 3 Days
 				+ (60 * 60 * 3)); // 3 Hours
 
 			expect((new Duration("P4Y4M4D")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 4) // 4 Years
-				+ (60 * 60 * 24 * 7 * 4 * 4) // 4 Months
+				(60 * 60 * 24 * 365.242 * 4) // 4 Years
+				+ (60 * 60 * 24 * 30.4368 * 4) // 4 Months
 				+ (60 * 60 * 24 * 4)); // 4 Days
 
 			expect((new Duration("P5Y5M")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 5) // 5 Years
-				+ (60 * 60 * 24 * 7 * 4 * 5)); // 5 Months
+				(60 * 60 * 24 * 365.242 * 5) // 5 Years
+				+ (60 * 60 * 24 * 30.4368 * 5)); // 5 Months
 
 			expect((new Duration("P6Y")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 6)); // 6 Years
+				(60 * 60 * 24 * 365.242 * 6)); // 6 Years
 
 			expect((new Duration("P11M11DT11H11M11S")).seconds).toBe(
-				(60 * 60 * 24 * 7 * 4 * 11) // 11 Months
+				(60 * 60 * 24 * 30.4368 * 11) // 11 Months
 				+ (60 * 60 * 24 * 11) // 11 Days
 				+ (60 * 60 * 11) // 11 Hours
 				+ (60 * 11) // 11 Minutes
@@ -124,23 +124,23 @@ describe('Duration Test Suite', function() {
 				+ 61); // 61 Seconds
 
 			expect((new Duration("P13M400DT25H61M61S")).seconds).toBe(
-				(60 * 60 * 24 * 7 * 4 * 13) // 13 Months
+				(60 * 60 * 24 * 30.4368 * 13) // 13 Months
 				+ (60 * 60 * 24 * 400) // 400 Days
 				+ (60 * 60 * 25) // 25 Hours
 				+ (60 * 61) // 61 Minutes
 				+ 61); // 61 Seconds
 
 			expect((new Duration("P271Y13M400DT25H61M61S")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 271) // 271 Years
-				+ (60 * 60 * 24 * 7 * 4 * 13) // 13 Months
+				(60 * 60 * 24 * 365.242 * 271) // 271 Years
+				+ (60 * 60 * 24 * 30.4368 * 13) // 13 Months
 				+ (60 * 60 * 24 * 400) // 400 Days
 				+ (60 * 60 * 25) // 25 Hours
 				+ (60 * 61) // 61 Minutes
 				+ 61); // 61 Seconds
 
 			expect((new Duration("P45Y8M2DT574H7021M4S")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 45) // 45 Years
-				+ (60 * 60 * 24 * 7 * 4 * 8) // 8 Months
+				(60 * 60 * 24 * 365.242 * 45) // 45 Years
+				+ (60 * 60 * 24 * 30.4368 * 8) // 8 Months
 				+ (60 * 60 * 24 * 2) // 2 Days
 				+ (60 * 60 * 574) // 574 Hours
 				+ (60 * 7021) // 7021 Minutes
@@ -169,16 +169,16 @@ describe('Duration Test Suite', function() {
 
 		it("should parse P[YYYY][MM][DD]T[hh][mm][ss] format", function() {
 			expect((new Duration("P00010101T010101")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 1) // 1 Year
-				+ (60 * 60 * 24 * 7 * 4 * 1) // 1 Month
+				(60 * 60 * 24 * 365.242 * 1) // 1 Year
+				+ (60 * 60 * 24 * 30.4368 * 1) // 1 Month
 				+ (60 * 60 * 24 * 1) // 1 Day
 				+ (60 * 60 * 1) // 1 Hour
 				+ (60 * 1) // 1 Minute
 				+ 1); // 1 Second
 
 			expect((new Duration("P00241202T100447")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 24) // 24 Years
-				+ (60 * 60 * 24 * 7 * 4 * 12) // 12 Months
+				(60 * 60 * 24 * 365.242 * 24) // 24 Years
+				+ (60 * 60 * 24 * 30.4368 * 12) // 12 Months
 				+ (60 * 60 * 24 * 2) // 2 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 4) // 4 Minutes
@@ -187,16 +187,16 @@ describe('Duration Test Suite', function() {
 
 		it("should parse P[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss] format", function() {
 			expect((new Duration("P0001-01-01T01:01:01")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 1) // 1 Year
-				+ (60 * 60 * 24 * 7 * 4 * 1) // 1 Month
+				(60 * 60 * 24 * 365.242 * 1) // 1 Year
+				+ (60 * 60 * 24 * 30.4368 * 1) // 1 Month
 				+ (60 * 60 * 24 * 1) // 1 Day
 				+ (60 * 60 * 1) // 1 Hour
 				+ (60 * 1) // 1 Minute
 				+ 1); // 1 Second
 
 			expect((new Duration("P0024-12-02T10:04:47")).seconds).toBe(
-				(60 * 60 * 24 * 365 * 24) // 24 Years
-				+ (60 * 60 * 24 * 7 * 4 * 12) // 12 Months
+				(60 * 60 * 24 * 365.242 * 24) // 24 Years
+				+ (60 * 60 * 24 * 30.4368 * 12) // 12 Months
 				+ (60 * 60 * 24 * 2) // 2 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 4) // 4 Minutes
@@ -298,27 +298,27 @@ describe('Duration Test Suite', function() {
 		});
 		
 		it("should know how many seconds are in a minute", function() {
-			expect(duration.SECONDS_IN_A_MINUTE).toBe(60);
+			expect(Calendar.Seconds.per.Minute).toBe(60);
 		});
 		
 		it("should know how many seconds are in an hour", function() {
-			expect(duration.SECONDS_IN_AN_HOUR).toBe(60 * 60);
+			expect(Calendar.Seconds.per.Hour).toBe(60 * 60);
 		});
 		
 		it("should know how many seconds are in a day", function() {
-			expect(duration.SECONDS_IN_A_DAY).toBe(60 * 60 * 24);
+			expect(Calendar.Seconds.per.Day).toBe(60 * 60 * 24);
 		});
 		
 		it("should know how many seconds are in a week", function() {
-			expect(duration.SECONDS_IN_A_WEEK).toBe(60 * 60 * 24 * 7);
+			expect(Calendar.Seconds.per.Week).toBe(60 * 60 * 24 * 7);
 		});
 		
 		it("should know how many seconds are in a month", function() {
-			expect(duration.SECONDS_IN_A_MONTH).toBe(60 * 60 * 24 * 7 * 4);
+			expect(Calendar.Seconds.per.Month).toBe(60 * 60 * 24 * 30.4368);
 		});
 		
 		it("should know how many seconds are in a year", function() {
-			expect(duration.SECONDS_IN_A_YEAR).toBe(60 * 60 * 24 * 365);
+			expect(Calendar.Seconds.per.Year).toBe(60 * 60 * 24 * 365.242);
 		});
 	});
 
@@ -335,8 +335,8 @@ describe('Duration Test Suite', function() {
 		
 		it("should return the correct cumulative number of seconds", function() {
 			expect(duration.inSeconds()).toBe(
-				(60 * 60 * 24 * 365 * 10) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 10) // 10 Months
+				(60 * 60 * 24 * 365.242 * 10) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 10) // 10 Months
 				+ (60 * 60 * 24 * 10) // 10 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 10) // 10 Minutes
@@ -345,8 +345,8 @@ describe('Duration Test Suite', function() {
 		
 		it("should return the correct cumulative number of minutes", function() {
 			expect(duration.inMinutes()).toBe(
-				((60 * 60 * 24 * 365 * 10) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 10) // 10 Months
+				((60 * 60 * 24 * 365.242 * 10) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 10) // 10 Months
 				+ (60 * 60 * 24 * 10) // 10 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 10) // 10 Minutes
@@ -356,8 +356,8 @@ describe('Duration Test Suite', function() {
 		
 		it("should return the correct cumulative number of hours", function() {
 			expect(duration.inHours()).toBe(
-				((60 * 60 * 24 * 365 * 10) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 10) // 10 Months
+				((60 * 60 * 24 * 365.242 * 10) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 10) // 10 Months
 				+ (60 * 60 * 24 * 10) // 10 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 10) // 10 Minutes
@@ -367,8 +367,8 @@ describe('Duration Test Suite', function() {
 		
 		it("should return the correct cumulative number of days", function() {
 			expect(duration.inDays()).toBe(
-				((60 * 60 * 24 * 365 * 10) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 10) // 10 Months
+				((60 * 60 * 24 * 365.242 * 10) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 10) // 10 Months
 				+ (60 * 60 * 24 * 10) // 10 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 10) // 10 Minutes
@@ -378,8 +378,8 @@ describe('Duration Test Suite', function() {
 		
 		it("should return the correct cumulative number of weeks", function() {
 			expect(duration.inWeeks()).toBe(
-				((60 * 60 * 24 * 365 * 10) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 10) // 10 Months
+				((60 * 60 * 24 * 365.242 * 10) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 10) // 10 Months
 				+ (60 * 60 * 24 * 10) // 10 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 10) // 10 Minutes
@@ -390,23 +390,23 @@ describe('Duration Test Suite', function() {
 		
 		it("should return the correct cumulative number of months", function() {
 			expect(duration.inMonths()).toBe(
-				((60 * 60 * 24 * 365 * 10) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 10) // 10 Months
+				((60 * 60 * 24 * 365.242 * 10) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 10) // 10 Months
 				+ (60 * 60 * 24 * 10) // 10 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 10) // 10 Minutes
-				+ 10) / 60 / 60 / 24 / 7 / 4); // 10 Seconds
+				+ 10) / 60 / 60 / 24 / 30.4368); // 10 Seconds
 				//Divided by the number of weeks in a month to give us the total months
 		});
 		
 		it("should return the correct cumulative number of years", function() {
 			expect(duration.inYears()).toBe(
-				((60 * 60 * 24 * 365 * 10) // 10 Years
-				+ (60 * 60 * 24 * 7 * 4 * 10) // 10 Months
+				((60 * 60 * 24 * 365.242 * 10) // 10 Years
+				+ (60 * 60 * 24 * 30.4368 * 10) // 10 Months
 				+ (60 * 60 * 24 * 10) // 10 Days
 				+ (60 * 60 * 10) // 10 Hours
 				+ (60 * 10) // 10 Minutes
-				+ 10) / 60 / 60 / 24 / 365); // 10 Seconds
+				+ 10) / 60 / 60 / 24 / 365.242); // 10 Seconds
 				//Divided by the number of days in a year to give us the total years
 		});
 	});
@@ -428,7 +428,7 @@ describe('Duration Test Suite', function() {
 			expect(((new Duration("PT1M")).add(new Duration("P2D"))).seconds).toBe(60 + (60 * 60 * 24 * 2));
 			expect(((new Duration('PT10S')).add(new Duration("PT5S"))).seconds).toBe(15);
 			expect(((new Duration('P2D')).add(new Duration("P1D"))).seconds).toBe(60 * 60 * 24 * 3);
-			expect(((new Duration('P4Y')).add(new Duration("P2M"))).seconds).toBe((60 * 60 * 24 * 365 * 4) + (60 * 60 * 24 * 7 * 4 * 2));
+			expect(((new Duration('P4Y')).add(new Duration("P2M"))).seconds).toBe((60 * 60 * 24 * 365.242 * 4) + (60 * 60 * 24 * 30.4368 * 2));
 		});
 		
 		it("should subtract various other durations", function() {
@@ -494,18 +494,19 @@ describe('Duration Test Suite', function() {
 				expect((new Duration('P' + weeks + 'W').ago())).toBe(weeks + ' weeks ago');
 			}
 
-			expect((new Duration(60 * 60 * 24 * 7 * 4).ago())).toBe('1 month ago');
-			expect((new Duration('P1M').ago())).toBe('1 month ago');
-			expect((new Duration('P4W').ago())).toBe('1 month ago');
+			expect((new Duration('P4W')).ago()).toBe('4 weeks ago');
+
+			expect((new Duration(60 * 60 * 24 * 30.4368)).ago()).toBe('1 month ago');
+			expect((new Duration('P1M')).ago()).toBe('1 month ago');
 			for (var months = 2; months < 12; months++) {
-				expect((new Duration(months * 60 * 60 * 24 * 7 * 4).ago())).toBe(months + ' months ago');
+				expect((new Duration(months * 60 * 60 * 24 * 30.4368).ago())).toBe(months + ' months ago');
 				expect((new Duration('P' + months + 'M').ago())).toBe(months + ' months ago');
 			}
 
-			expect((new Duration(60 * 60 * 24 * 365).ago())).toBe('1 year ago');
+			expect((new Duration(60 * 60 * 24 * 365.242).ago())).toBe('1 year ago');
 			expect((new Duration('P1Y').ago())).toBe('1 year ago');
 			for (var years = 2; years <= 50; years++) {
-				expect((new Duration(years * 60 * 60 * 24 * 365).ago())).toBe(years + ' years ago');
+				expect((new Duration(years * 60 * 60 * 24 * 365.242).ago())).toBe(years + ' years ago');
 				expect((new Duration('P' + years + 'Y').ago())).toBe(years + ' years ago');
 			}
 		});

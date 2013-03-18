@@ -1,6 +1,6 @@
 duration.js
 =============================
-A JavaScript library for parsing and handling ISO 8601 formatted Duration strings.
+A JavaScript library for parsing and manipulating ISO 8601 formatted duration strings.
 
 
 Features
@@ -9,15 +9,17 @@ Features
 	*  P[#Y][#M][#D]T[#H][#M][#S]  or  P#W
 	*  PYYYY-MM-DDTHH:MM:SS
 	*  PYYYYMMDDTHHMMSS
+*  Time periods represented by weeks, months and years are calculated using average values
 *  Basic arithmetic for adding and subtracting durations
 *  Formatted output strings
+*  No other dependencies
 
 
 Usage
 -----------------------------
 To make use of duration.js you must reference the [duration.js](js/duration.js) file in your environment before you execute code that utilizes the Duration object. Probably like this:
 
-		<script src="duration.js" />
+		<script src="duration.js" /> 
 		<script src="myscript.js" />
 
 Instantiation:
@@ -52,9 +54,9 @@ Formatted Output:
 		(new Duration('P60Y4M')).ago(); // '60 years ago'
 
 		(new Duration()).remaining(); // '0:00'
-		(new Duration(PT1S)).remaining(); // '0:01'
-		(new Duration(PT4M)).remaining(); // '4:00'
-		(new Duration(P1DT10M)).remaining(); // '24:10:00'
+		(new Duration('PT1S')).remaining(); // '0:01'
+		(new Duration('PT4M')).remaining(); // '4:00'
+		(new Duration('P1DT10M')).remaining(); // '24:10:00'
 
 Arithmetic:
 
