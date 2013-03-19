@@ -608,6 +608,34 @@ describe('Duration Test Suite', function() {
 			expect((new Duration('P3Y10M21DT1H50M43S')).standardweeks()).toBe('P203W');
 			expect((new Duration('P3Y10M21DT1H50M43S')).extended()).toBe('P0003-10-21T01:50:43');
 			expect((new Duration('P3Y10M21DT1H50M43S')).basic()).toBe('P00031021T015043');
+
+			expect((new Duration()).standard()).toBe('PT0S');
+			expect((new Duration()).extended()).toBe('P0000-00-00T00:00:00');
+			expect((new Duration()).basic()).toBe('P00000000T000000');
+
+			expect((new Duration('P3Y')).standard()).toBe('P3Y');
+			expect((new Duration('P3Y')).extended()).toBe('P0003-00-00T00:00:00');
+			expect((new Duration('P3Y')).basic()).toBe('P00030000T000000');
+
+			expect((new Duration('P3M')).standard()).toBe('P3M');
+			expect((new Duration('P3M')).extended()).toBe('P0000-03-00T00:00:00');
+			expect((new Duration('P3M')).basic()).toBe('P00000300T000000');
+
+			expect((new Duration('P3D')).standard()).toBe('P3D');
+			expect((new Duration('P3D')).extended()).toBe('P0000-00-03T00:00:00');
+			expect((new Duration('P3D')).basic()).toBe('P00000003T000000');
+
+			expect((new Duration('PT3H')).standard()).toBe('PT3H');
+			expect((new Duration('PT3H')).extended()).toBe('P0000-00-00T03:00:00');
+			expect((new Duration('PT3H')).basic()).toBe('P00000000T030000');
+
+			expect((new Duration('PT3M')).standard()).toBe('PT3M');
+			expect((new Duration('PT3M')).extended()).toBe('P0000-00-00T00:03:00');
+			expect((new Duration('PT3M')).basic()).toBe('P00000000T000300');
+
+			expect((new Duration('PT3S')).standard()).toBe('PT3S');
+			expect((new Duration('PT3S')).extended()).toBe('P0000-00-00T00:00:03');
+			expect((new Duration('PT3S')).basic()).toBe('P00000000T000003');
 			
 		});
 	});

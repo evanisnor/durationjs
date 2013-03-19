@@ -344,12 +344,19 @@ var Duration = function(representation) {
 
 	self.standard = function() {
 		var duration = self.value();
-		return 'P' + duration.years + 'Y'
-				+ duration.months + 'M'
-				+ duration.days + 'DT'
-				+ duration.hours + 'H'
-				+ duration.minutes + 'M'
-				+ duration.seconds + 'S';
+		if (self.seconds == 0) {
+			return 'PT0S';
+		}
+
+		var shouldHaveT = duration.hours > 0 || duration.minutes > 0 || duration.seconds > 0;
+
+		return 'P' + ((duration.years > 0) ? duration.years + 'Y' : '')
+				+ ((duration.months > 0) ? duration.months + 'M' : '')
+				+ ((duration.days > 0) ? duration.days + 'D' : '')
+				+ ((shouldHaveT) ? 'T' : '')
+				+ ((duration.hours > 0) ? duration.hours + 'H' : '')
+				+ ((duration.minutes > 0) ? duration.minutes + 'M' : '')
+				+ ((duration.seconds > 0) ? duration.seconds + 'S' : '');
 	}
 
 	self.standardweeks = function() {
