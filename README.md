@@ -2,7 +2,6 @@ duration.js
 =============================
 A JavaScript library for parsing and manipulating ISO 8601 formatted duration strings.
 
-
 Features
 -----------------------------
 *  Parsing available for three duration string formats:
@@ -13,7 +12,6 @@ Features
 *  Basic arithmetic for adding and subtracting durations
 *  Formatted output strings
 *  No other dependencies
-
 
 Usage
 -----------------------------
@@ -30,8 +28,48 @@ Instantiation:
 		new Duration('P1YT5H'); // 1 year 5 minutes
 		new Duration('PT2S'); // 2 seconds
 		new Duration('P45Y8M2DT574H7021M4S'); // 45 years, 8 minutes, 2 days, 574 hours, 7021 minutes and 4 seconds
-		new Duration('P0010-00-00T00:00:00') // 10 years
-		new Duration('P0001-00-00T05:00:00') // 1 year 5 minutes
+		new Duration('P0010-00-00T00:00:00'); // 10 years
+		new Duration('P0001-00-00T05:00:00'); // 1 year 5 minutes
+
+Methods
+-----------------------------
+
+	value()				Get a JSON object with the individual duration values
+
+	inYears()			Get float values that represent the entire duration
+	inMonths()
+	inWeeks()
+	inDays()
+	inHours()
+	inMinutes()
+	inSeconds()
+
+	ago()				Get an approximate human-readable string that describes
+						the duration, such as: '15 minutes ago'.
+
+	asClock()			Get the duration represented as a digital clock that only
+						shows seconds, minutes and hours if present.
+						Example: '45:10:00' means 45 hours and 10 minutes
+
+	asStandard()		Get the duration as an ISO 8601-compliant standard duration
+						string. Example: 'P2DT4H30M'
+
+	asStandardWeeks()	Get the duration as an ISO 8601-compliant standard duration
+						string in the number of weeks. Example: 'P45W'
+
+	asExtended()		Get the duration as an ISO 8601-compliant extended duration
+						string. Example: 'P0003-10-21T01:50:43'
+
+	asBasic()			Get the duration as an ISO 8601-compliant basic duration
+						string. Example: 'P00031021T015043'
+
+	add(Duration)		Add two Durations together to produce a new Duration object.
+
+	subtract(Duration)	Subtract one Duration from another to produce a new Duration
+						object.
+
+Examples
+-----------------------------
 
 Parsed Values as an Object:
 
@@ -60,10 +98,10 @@ Cumulative Getters:
 
 Compliant Output (useful for conversions):
 
-		(new Duration('P3Y10M21DT1H50M43S')).standard() // 'P3Y10M21DT1H50M43S'
-		(new Duration('P3Y10M21DT1H50M43S')).standardweeks() // 'P203W'
-		(new Duration('P3Y10M21DT1H50M43S')).extended() // 'P0003-10-21T01:50:43'
-		(new Duration('P3Y10M21DT1H50M43S')).basic() // 'P00031021T015043'
+		(new Duration('P3Y10M21DT1H50M43S')).asStandard(); // 'P3Y10M21DT1H50M43S'
+		(new Duration('P3Y10M21DT1H50M43S')).asStandardWeeks(); // 'P203W'
+		(new Duration('P3Y10M21DT1H50M43S')).asExtended(); // 'P0003-10-21T01:50:43'
+		(new Duration('P3Y10M21DT1H50M43S')).asBasic(); // 'P00031021T015043'
 
 Formatted Output:
 		
@@ -73,10 +111,10 @@ Formatted Output:
 		(new Duration('PT8D4M50S')).ago(); // '8 days ago'
 		(new Duration('P60Y4M')).ago(); // '60 years ago'
 
-		(new Duration()).remaining(); // '0:00'
-		(new Duration('PT1S')).remaining(); // '0:01'
-		(new Duration('PT4M')).remaining(); // '4:00'
-		(new Duration('P1DT10M')).remaining(); // '24:10:00'
+		(new Duration()).asClock(); // '0:00'
+		(new Duration('PT1S')).asClock(); // '0:01'
+		(new Duration('PT4M')).asClock(); // '4:00'
+		(new Duration('P1DT10M')).asClock(); // '24:10:00'
 
 Arithmetic:
 

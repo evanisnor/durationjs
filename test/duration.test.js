@@ -572,7 +572,7 @@ describe('Duration Test Suite', function() {
 		});
 		
 		it("should return a formatted duration in terms of how much time is remaining", function() {
-			expect((new Duration()).remaining()).toBe("0:00");
+			expect((new Duration()).asClock()).toBe("0:00");
 
 			// TRIPLE-NESTED LOOP... ACTIVATE!
 			// This kills the browser.
@@ -588,9 +588,9 @@ describe('Duration Test Suite', function() {
 							formattedString = hours + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
 						}
 
-						expect((new Duration((hours * 60 * 60) + (minutes * 60) + seconds)).remaining())
+						expect((new Duration((hours * 60 * 60) + (minutes * 60) + seconds)).asClock())
 							.toBe(formattedString);
-						expect((new Duration('PT' + hours + 'H' + minutes + 'M' + seconds + 'S')).remaining())
+						expect((new Duration('PT' + hours + 'H' + minutes + 'M' + seconds + 'S')).asClock())
 							.toBe(formattedString);
 					}
 				}
@@ -599,43 +599,43 @@ describe('Duration Test Suite', function() {
 		});
 		
 		it("should return a valid ISO 8601 duration string", function() {
-			expect((new Duration('P1Y1M1DT1H1M1S')).standard()).toBe('P1Y1M1DT1H1M1S');
-			expect((new Duration('P1Y1M1DT1H1M1S')).standardweeks()).toBe('P56W');
-			expect((new Duration('P1Y1M1DT1H1M1S')).extended()).toBe('P0001-01-01T01:01:01');
-			expect((new Duration('P1Y1M1DT1H1M1S')).basic()).toBe('P00010101T010101');
+			expect((new Duration('P1Y1M1DT1H1M1S')).asStandard()).toBe('P1Y1M1DT1H1M1S');
+			expect((new Duration('P1Y1M1DT1H1M1S')).asStandardWeeks()).toBe('P56W');
+			expect((new Duration('P1Y1M1DT1H1M1S')).asExtended()).toBe('P0001-01-01T01:01:01');
+			expect((new Duration('P1Y1M1DT1H1M1S')).asBasic()).toBe('P00010101T010101');
 
-			expect((new Duration('P3Y10M21DT1H50M43S')).standard()).toBe('P3Y10M21DT1H50M43S');
-			expect((new Duration('P3Y10M21DT1H50M43S')).standardweeks()).toBe('P203W');
-			expect((new Duration('P3Y10M21DT1H50M43S')).extended()).toBe('P0003-10-21T01:50:43');
-			expect((new Duration('P3Y10M21DT1H50M43S')).basic()).toBe('P00031021T015043');
+			expect((new Duration('P3Y10M21DT1H50M43S')).asStandard()).toBe('P3Y10M21DT1H50M43S');
+			expect((new Duration('P3Y10M21DT1H50M43S')).asStandardWeeks()).toBe('P203W');
+			expect((new Duration('P3Y10M21DT1H50M43S')).asExtended()).toBe('P0003-10-21T01:50:43');
+			expect((new Duration('P3Y10M21DT1H50M43S')).asBasic()).toBe('P00031021T015043');
 
-			expect((new Duration()).standard()).toBe('PT0S');
-			expect((new Duration()).extended()).toBe('P0000-00-00T00:00:00');
-			expect((new Duration()).basic()).toBe('P00000000T000000');
+			expect((new Duration()).asStandard()).toBe('PT0S');
+			expect((new Duration()).asExtended()).toBe('P0000-00-00T00:00:00');
+			expect((new Duration()).asBasic()).toBe('P00000000T000000');
 
-			expect((new Duration('P3Y')).standard()).toBe('P3Y');
-			expect((new Duration('P3Y')).extended()).toBe('P0003-00-00T00:00:00');
-			expect((new Duration('P3Y')).basic()).toBe('P00030000T000000');
+			expect((new Duration('P3Y')).asStandard()).toBe('P3Y');
+			expect((new Duration('P3Y')).asExtended()).toBe('P0003-00-00T00:00:00');
+			expect((new Duration('P3Y')).asBasic()).toBe('P00030000T000000');
 
-			expect((new Duration('P3M')).standard()).toBe('P3M');
-			expect((new Duration('P3M')).extended()).toBe('P0000-03-00T00:00:00');
-			expect((new Duration('P3M')).basic()).toBe('P00000300T000000');
+			expect((new Duration('P3M')).asStandard()).toBe('P3M');
+			expect((new Duration('P3M')).asExtended()).toBe('P0000-03-00T00:00:00');
+			expect((new Duration('P3M')).asBasic()).toBe('P00000300T000000');
 
-			expect((new Duration('P3D')).standard()).toBe('P3D');
-			expect((new Duration('P3D')).extended()).toBe('P0000-00-03T00:00:00');
-			expect((new Duration('P3D')).basic()).toBe('P00000003T000000');
+			expect((new Duration('P3D')).asStandard()).toBe('P3D');
+			expect((new Duration('P3D')).asExtended()).toBe('P0000-00-03T00:00:00');
+			expect((new Duration('P3D')).asBasic()).toBe('P00000003T000000');
 
-			expect((new Duration('PT3H')).standard()).toBe('PT3H');
-			expect((new Duration('PT3H')).extended()).toBe('P0000-00-00T03:00:00');
-			expect((new Duration('PT3H')).basic()).toBe('P00000000T030000');
+			expect((new Duration('PT3H')).asStandard()).toBe('PT3H');
+			expect((new Duration('PT3H')).asExtended()).toBe('P0000-00-00T03:00:00');
+			expect((new Duration('PT3H')).asBasic()).toBe('P00000000T030000');
 
-			expect((new Duration('PT3M')).standard()).toBe('PT3M');
-			expect((new Duration('PT3M')).extended()).toBe('P0000-00-00T00:03:00');
-			expect((new Duration('PT3M')).basic()).toBe('P00000000T000300');
+			expect((new Duration('PT3M')).asStandard()).toBe('PT3M');
+			expect((new Duration('PT3M')).asExtended()).toBe('P0000-00-00T00:03:00');
+			expect((new Duration('PT3M')).asBasic()).toBe('P00000000T000300');
 
-			expect((new Duration('PT3S')).standard()).toBe('PT3S');
-			expect((new Duration('PT3S')).extended()).toBe('P0000-00-00T00:00:03');
-			expect((new Duration('PT3S')).basic()).toBe('P00000000T000003');
+			expect((new Duration('PT3S')).asStandard()).toBe('PT3S');
+			expect((new Duration('PT3S')).asExtended()).toBe('P0000-00-00T00:00:03');
+			expect((new Duration('PT3S')).asBasic()).toBe('P00000000T000003');
 			
 		});
 	});

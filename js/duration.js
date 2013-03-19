@@ -329,7 +329,7 @@ var Duration = function(representation) {
 		}
 	}
 
-	self.remaining = function() {
+	self.asClock = function() {
 		var duration = self.value();
 		if (duration.hours == 0) {
 			return duration.minutes + ':'
@@ -342,7 +342,7 @@ var Duration = function(representation) {
 		}
 	}
 
-	self.standard = function() {
+	self.asStandard = function() {
 		var duration = self.value();
 		if (self.seconds == 0) {
 			return 'PT0S';
@@ -359,11 +359,11 @@ var Duration = function(representation) {
 				+ ((duration.seconds > 0) ? duration.seconds + 'S' : '');
 	}
 
-	self.standardweeks = function() {
+	self.asStandardWeeks = function() {
 		return 'P' + Math.floor(self.inWeeks()) + 'W';
 	}
 
-	self.extended = function() {
+	self.asExtended = function() {
 		var duration = self.value();
 		return 'P' + padInt(duration.years, 4) + '-'
 				+ padInt(duration.months, 2) + '-'
@@ -373,7 +373,7 @@ var Duration = function(representation) {
 				+ padInt(duration.seconds, 2);
 	}
 
-	self.basic = function() {
+	self.asBasic = function() {
 		var duration = self.value();
 		return 'P' + padInt(duration.years, 4)
 				+ padInt(duration.months, 2)
