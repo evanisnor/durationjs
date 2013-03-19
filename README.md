@@ -88,13 +88,13 @@ Cumulative Getters:
 
 		// A duration of 10 years, 10 months, 10 days, 10 hours, 10 minutes and 10 seconds
 		var duration = new Duration('P10Y10M10DT10H10M10S');
-		duration.inSeconds(); // 340452610 seconds
-		duration.inMinutes(); // 5674210.166666667 minutes
-		duration.inHours(); // 94570.16944444444 hours
-		duration.inDays(); // 3940.423726851852 days
-		duration.inWeeks(); // 562.9176752645502 weeks
-		duration.inMonths(); // 140.72941881613755 months
-		duration.inYears(); // 10.79568144342973 years
+		duration.inYears(); // 10.861871654551917
+		duration.inMonths(); // 130.34260260118842
+		duration.inWeeks(); // 566.7445324074074
+		duration.inDays(); // 3967.211726851852
+		duration.inHours(); // 95213.08144444444
+		duration.inMinutes(); // 5712784.886666667
+		duration.inSeconds(); // 342767093.2
 
 Compliant Output (useful for conversions):
 
@@ -120,23 +120,23 @@ Arithmetic:
 
 		var d_10sec = new Duration('PT10S');
 		var d_5sec = new Duration('PT5S');
-		var d_15sec = d_10sec.add(d_5sec); // New Duration object
+		var d_15sec = d_10sec.add(d_5sec); // New Duration object as 15 seconds
 
 		var d_2days = new Duration('P2D');
 		var d_1day = new Duration('P1D');
-		var d_3days = d_2days.add(d_1day); // New Duration object
+		var d_3days = d_2days.add(d_1day); // New Duration object as 3 days
 
 		var d_4years = new Duration('P4Y');
 		var d_2months = new Duration('P2M');
-		var d_4years2months = d_4years.add(d_2months); // New Duration object
+		var d_4years2months = d_4years.add(d_2months); // New Duration object as 4 years 2 months
 
 		var d_3hours = new Duration('PT3H');
 		var d_1hour = new Duration('PT1H');
-		var d_2hours = d_3hours.subtract(d_1hour); // New Duration object
+		var d_2hours = d_3hours.subtract(d_1hour); // New Duration object as 2 hours
 
 		var d_5mins = new Duration('PT5M');
 		var d_10sec = new Duration('PT10S');
-		var d_4min50sec = d_5mins.subtract(d_10sec); // New Duration object
+		var d_4min50sec = d_5mins.subtract(d_10sec); // New Duration object as 4 minutes 50 seconds
 
 
 Contributing
