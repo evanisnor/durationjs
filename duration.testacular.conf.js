@@ -10,7 +10,7 @@ basePath = '';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'js/vendor/sprintf-0.7-beta1.js',
+  'test/vendor/sprintf-0.7-beta1.js',
   'js/duration.js',
   'test/*test.js',
 ];
