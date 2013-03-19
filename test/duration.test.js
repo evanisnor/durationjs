@@ -10,6 +10,42 @@ describe('Duration Test Suite', function() {
 
 	});
 
+	describe('Calendar Constants Tests', function() {
+		var duration;
+
+		beforeEach(function() {
+			duration = new Duration();
+		});
+
+		afterEach(function() {
+
+		});
+		
+		it("should know how many seconds are in a minute", function() {
+			expect(Calendar.Seconds.per.Minute).toBe(60);
+		});
+		
+		it("should know how many seconds are in an hour", function() {
+			expect(Calendar.Seconds.per.Hour).toBe(60 * 60);
+		});
+		
+		it("should know how many seconds are in a day", function() {
+			expect(Calendar.Seconds.per.Day).toBe(60 * 60 * 24);
+		});
+		
+		it("should know how many seconds are in a week", function() {
+			expect(Calendar.Seconds.per.Week).toBe(60 * 60 * 24 * 7);
+		});
+		
+		it("should know how many seconds are in a month", function() {
+			expect(Calendar.Seconds.per.Month).toBe(60 * 60 * 24 * 30.4368);
+		});
+		
+		it("should know how many seconds are in a year", function() {
+			expect(Calendar.Seconds.per.Year).toBe(60 * 60 * 24 * 365.242);
+		});
+	});
+
 	describe('Integer Parsing Tests', function() {
 		it('should parse integers from strings with leading zeroes', function() {
 			for (var i = 0; i < 2400; i++) {
@@ -20,6 +56,21 @@ describe('Duration Test Suite', function() {
 			}
 		});
 	});
+
+	describe('Integer Padding Tests', function() {
+		it('should pad integers with leading zeroes', function() {
+			expect(padInt(1, 0)).toBe('');
+			expect(padInt(1, 1)).toBe('1');
+			expect(padInt(1, 2)).toBe('01');
+			expect(padInt(1, 3)).toBe('001');
+			expect(padInt(1, 4)).toBe('0001');
+			expect(padInt(12, 0)).toBe('');
+			expect(padInt(12, 1)).toBe('1');
+			expect(padInt(12, 2)).toBe('12');
+			expect(padInt(12, 3)).toBe('012');
+			expect(padInt(12, 4)).toBe('0012');
+		});
+	});	
 
 	describe('Duration Parsing Tests', function() {
 		
@@ -297,42 +348,6 @@ describe('Duration Test Suite', function() {
 		});
 	});
 
-	describe('Duration Constants Tests', function() {
-		var duration;
-
-		beforeEach(function() {
-			duration = new Duration();
-		});
-
-		afterEach(function() {
-
-		});
-		
-		it("should know how many seconds are in a minute", function() {
-			expect(Calendar.Seconds.per.Minute).toBe(60);
-		});
-		
-		it("should know how many seconds are in an hour", function() {
-			expect(Calendar.Seconds.per.Hour).toBe(60 * 60);
-		});
-		
-		it("should know how many seconds are in a day", function() {
-			expect(Calendar.Seconds.per.Day).toBe(60 * 60 * 24);
-		});
-		
-		it("should know how many seconds are in a week", function() {
-			expect(Calendar.Seconds.per.Week).toBe(60 * 60 * 24 * 7);
-		});
-		
-		it("should know how many seconds are in a month", function() {
-			expect(Calendar.Seconds.per.Month).toBe(60 * 60 * 24 * 30.4368);
-		});
-		
-		it("should know how many seconds are in a year", function() {
-			expect(Calendar.Seconds.per.Year).toBe(60 * 60 * 24 * 365.242);
-		});
-	});
-
 	describe('Duration Cumulative Getter Tests', function() {
 		var duration;
 
@@ -461,6 +476,40 @@ describe('Duration Test Suite', function() {
 		afterEach(function() {
 
 		});
+
+		it('should return an object that has the parsed values', function() {
+			var d1 = new Duration('P1Y1M1DT1H1M1S');
+			expect(d1.value().years).toBe(1);
+			expect(d1.value().months).toBe(1);
+			expect(d1.value().days).toBe(1);
+			expect(d1.value().hours).toBe(1);
+			expect(d1.value().minutes).toBe(1);
+			expect(d1.value().seconds).toBe(1);
+
+			var d2 = new Duration('P5Y1M20DT4H23M40S');
+			expect(d2.value().years).toBe(5);
+			expect(d2.value().months).toBe(1);
+			expect(d2.value().days).toBe(20);
+			expect(d2.value().hours).toBe(4);
+			expect(d2.value().minutes).toBe(23);
+			expect(d2.value().seconds).toBe(40);
+
+			var d3 = new Duration('PT4H23M40S');
+			expect(d3.value().years).toBe(0);
+			expect(d3.value().months).toBe(0);
+			expect(d3.value().days).toBe(0);
+			expect(d3.value().hours).toBe(4);
+			expect(d3.value().minutes).toBe(23);
+			expect(d3.value().seconds).toBe(40);
+
+			var d4 = new Duration('P24Y3MT4S');
+			expect(d4.value().years).toBe(24);
+			expect(d4.value().months).toBe(3);
+			expect(d4.value().days).toBe(0);
+			expect(d4.value().hours).toBe(0);
+			expect(d4.value().minutes).toBe(0);
+			expect(d4.value().seconds).toBe(4);
+		});
 		
 		it("should return a formatted duration in approximate terms of how long ago something was", function() {
 			expect((new Duration(0).ago())).toBe('just now');
@@ -549,11 +598,17 @@ describe('Duration Test Suite', function() {
 
 		});
 		
-		// it("should return a valid ISO 8601 duration string", function() {
-		// 	expect((new Duration('P1Y1M1DT1H1M1S')).formatNoModuli()).toBe('P1Y1M1DT1H1M1S');
-		// 	expect((new Duration('P1Y1M1DT1H1M1S')).formatNoModuliWeeks()).toBe('P56W');
-		// 	expect((new Duration('P1Y1M1DT1H1M1S')).formatModuliDelimited()).toBe('P0001-01-01T01:01:01');
-		// 	expect((new Duration('P1Y1M1DT1H1M1S')).formatModuliNonDelimited()).toBe('P00010101T010101');
-		// });
+		it("should return a valid ISO 8601 duration string", function() {
+			expect((new Duration('P1Y1M1DT1H1M1S')).standard()).toBe('P1Y1M1DT1H1M1S');
+			expect((new Duration('P1Y1M1DT1H1M1S')).standardweeks()).toBe('P56W');
+			expect((new Duration('P1Y1M1DT1H1M1S')).extended()).toBe('P0001-01-01T01:01:01');
+			expect((new Duration('P1Y1M1DT1H1M1S')).basic()).toBe('P00010101T010101');
+
+			expect((new Duration('P3Y10M21DT1H50M43S')).standard()).toBe('P3Y10M21DT1H50M43S');
+			expect((new Duration('P3Y10M21DT1H50M43S')).standardweeks()).toBe('P203W');
+			expect((new Duration('P3Y10M21DT1H50M43S')).extended()).toBe('P0003-10-21T01:50:43');
+			expect((new Duration('P3Y10M21DT1H50M43S')).basic()).toBe('P00031021T015043');
+			
+		});
 	});
 });

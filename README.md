@@ -33,6 +33,19 @@ Instantiation:
 		new Duration('P0010-00-00T00:00:00') // 10 years
 		new Duration('P0001-00-00T05:00:00') // 1 year 5 minutes
 
+Parsed Values as an Object:
+
+		(new Duration('P3Y10M21DT1H50M43S')).value();
+		// returns:
+		{ 
+			years : 3,
+			months : 10,
+			days : 21,
+			hours : 1,
+			minutes : 50,
+			seconds : 43
+		}
+
 Cumulative Getters:
 
 		// A duration of 10 years, 10 months, 10 days, 10 hours, 10 minutes and 10 seconds
@@ -44,6 +57,13 @@ Cumulative Getters:
 		duration.inWeeks(); // 562.9176752645502 weeks
 		duration.inMonths(); // 140.72941881613755 months
 		duration.inYears(); // 10.79568144342973 years
+
+Compliant Output (useful for conversions):
+
+		(new Duration('P3Y10M21DT1H50M43S')).standard() // 'P3Y10M21DT1H50M43S'
+		(new Duration('P3Y10M21DT1H50M43S')).standardweeks() // 'P203W'
+		(new Duration('P3Y10M21DT1H50M43S')).extended() // 'P0003-10-21T01:50:43'
+		(new Duration('P3Y10M21DT1H50M43S')).basic() // 'P00031021T015043'
 
 Formatted Output:
 		
