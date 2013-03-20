@@ -1,6 +1,6 @@
 {
   "name": "durationjs",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "A JavaScript library for parsing and manipulating ISO 8601 formatted Duration strings.",
   "author": "leadhead9 <ewisnor@gmail.com>",
   "main": "duration.testacular.conf.js",
