@@ -46,17 +46,6 @@ describe('Duration Test Suite', function() {
 		});
 	});
 
-	describe('Integer Parsing Tests', function() {
-		it('should parse integers from strings with leading zeroes', function() {
-			for (var i = 0; i < 2400; i++) {
-				expect(parseIntBase10('' + i)).toBe(i);
-				expect(parseIntBase10('0' + i)).toBe(i);
-				expect(parseIntBase10('00' + i)).toBe(i);
-				expect(parseIntBase10('000' + i)).toBe(i);
-			}
-		});
-	});
-
 	describe('Integer Padding Tests', function() {
 		it('should pad integers with leading zeroes', function() {
 			expect(padInt(1, 0)).toBe('');

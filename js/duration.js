@@ -55,22 +55,6 @@ var Calendar = {
 };
 
 /*
-Use this instead of parseInt() for parsing integers from strings. This prevents Firefox
-from interpreting '00x' as octal x.
-*/
-var parseIntBase10 = function(string) {
-	if (/^[0]*$/.test(string)) {
-		return 0;
-	}
-
-	var match = string.match(/^0*(\d*)$/);
-	if (match.length < 2) {
-		throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-	}
-	return parseInt(match[1]);
-}
-
-/*
 Pad a value with leading zeros by specifying the desired length of the result string.
 	Example: padInt(2, 4) will return '0002'
 */
@@ -118,7 +102,7 @@ var Duration = function(representation) {
 			for (var i = 1; i < match.length; i++) {
 				var value = match[i];
 				if (/\d+W/.test(value)) {
-					self.seconds += parseIntBase10(value.replace('W', '')) * Calendar.Seconds.per.Week;
+					self.seconds += parseInt(value.replace('W', ''), 10) * Calendar.Seconds.per.Week;
 				}
 				else if (/\d+[A-Z]/.test(value)) {
 					throw new Error(self.UNEXPECTED_FORMAT_ERROR);
@@ -137,22 +121,22 @@ var Duration = function(representation) {
 					hasFoundT = true;
 				}
 				else if (/\d+Y/.test(value)) {
-					self.seconds += parseIntBase10(value.replace('Y', '')) * Calendar.Seconds.per.Year;
+					self.seconds += parseInt(value.replace('Y', ''), 10) * Calendar.Seconds.per.Year;
 				}
 				else if (/\d+M/.test(value) && !hasFoundT) {
-					self.seconds += parseIntBase10(value.replace('M', '')) * Calendar.Seconds.per.Month;
+					self.seconds += parseInt(value.replace('M', ''), 10) * Calendar.Seconds.per.Month;
 				}
 				else if (/\d+D/.test(value)) {
-					self.seconds += parseIntBase10(value.replace('D', '')) * Calendar.Seconds.per.Day;
+					self.seconds += parseInt(value.replace('D', ''), 10) * Calendar.Seconds.per.Day;
 				}
 				else if (/\d+H/.test(value)) {
-					self.seconds += parseIntBase10(value.replace('H', '')) * Calendar.Seconds.per.Hour;
+					self.seconds += parseInt(value.replace('H', ''), 10) * Calendar.Seconds.per.Hour;
 				}
 				else if (/\d+M/.test(value) && hasFoundT) {
-					self.seconds += parseIntBase10(value.replace('M', '')) * Calendar.Seconds.per.Minute;
+					self.seconds += parseInt(value.replace('M', ''), 10) * Calendar.Seconds.per.Minute;
 				}
 				else if (/\d+S/.test(value)) {
-					self.seconds += parseIntBase10(value.replace('S', ''));
+					self.seconds += parseInt(value.replace('S', ''), 10);
 				}
 				else if (/\d+[A-Z]/.test(value)) {
 					throw new Error(self.UNEXPECTED_FORMAT_ERROR);
@@ -163,7 +147,7 @@ var Duration = function(representation) {
 			|| pattern === self.DurationFormat.Basic) {
 			
 			for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
-				var value = parseIntBase10(match[groupIndex]);
+				var value = parseInt(match[groupIndex], 10);
 				if (groupIndex === 1) {
 					self.seconds += value * Calendar.Seconds.per.Year;
 				}
