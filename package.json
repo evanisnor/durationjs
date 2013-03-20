@@ -14,7 +14,6 @@
   },
   "devDependencies": {},
   "scripts": {
-    //"test": "testacular start duration.testacular.conf.js"
     "test" : "./node_modules/.bin/karma start --browsers Firefox --single-run"
   },
   "repository": {
