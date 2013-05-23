@@ -254,27 +254,27 @@ Duration.prototype.inSeconds = function() {
 }
 
 Duration.prototype.inMinutes = function() {
-	return this.seconds / this.Calendar.Seconds.per.Minute;
+	return this.seconds / Duration.Calendar.Seconds.per.Minute;
 }
 
 Duration.prototype.inHours = function() {
-	return this.seconds / this.Calendar.Seconds.per.Hour;
+	return this.seconds / Duration.Calendar.Seconds.per.Hour;
 }
 
 Duration.prototype.inDays = function() {
-	return this.seconds / this.Calendar.Seconds.per.Day;
+	return this.seconds / Duration.Calendar.Seconds.per.Day;
 }
 
 Duration.prototype.inWeeks = function() {
-	return this.seconds / this.Calendar.Seconds.per.Week;
+	return this.seconds / Duration.Calendar.Seconds.per.Week;
 }
 
 Duration.prototype.inMonths = function() {
-	return this.seconds / this.Calendar.Seconds.per.Month;
+	return this.seconds / Duration.Calendar.Seconds.per.Month;
 }
 
 Duration.prototype.inYears = function() {
-	return this.seconds / this.Calendar.Seconds.per.Year;
+	return this.seconds / Duration.Calendar.Seconds.per.Year;
 }
 
 /* Arithmetic */
@@ -294,22 +294,22 @@ Returns an object that represents the full duration with integer values.
 */
 Duration.prototype.value = function() {
 	var result = {};
-	result.years = Math.floor(this.seconds / this.Calendar.Seconds.per.Year);
-	result.months = Math.floor((this.seconds - (result.years * this.Calendar.Seconds.per.Year)) / this.Calendar.Seconds.per.Month);
-	result.days = Math.floor((this.seconds - (result.years * this.Calendar.Seconds.per.Year)
-					- (result.months * this.Calendar.Seconds.per.Month)) / this.Calendar.Seconds.per.Day);
-	result.hours = Math.floor((this.seconds - (result.years * this.Calendar.Seconds.per.Year)
-					- (result.months * this.Calendar.Seconds.per.Month)
-					- (result.days * this.Calendar.Seconds.per.Day)) / this.Calendar.Seconds.per.Hour);
-	result.minutes = Math.floor((this.seconds - (result.years * this.Calendar.Seconds.per.Year)
-					- (result.months * this.Calendar.Seconds.per.Month)
-					- (result.days * this.Calendar.Seconds.per.Day)
-					- (result.hours * this.Calendar.Seconds.per.Hour)) / this.Calendar.Seconds.per.Minute);
-	result.seconds = Math.round((this.seconds - (result.years * this.Calendar.Seconds.per.Year)
-					- (result.months * this.Calendar.Seconds.per.Month)
-					- (result.days * this.Calendar.Seconds.per.Day)
-					- (result.hours * this.Calendar.Seconds.per.Hour)
-					- (result.minutes * this.Calendar.Seconds.per.Minute)));
+	result.years = Math.floor(this.seconds / Duration.Calendar.Seconds.per.Year);
+	result.months = Math.floor((this.seconds - (result.years * Duration.Calendar.Seconds.per.Year)) / Duration.Calendar.Seconds.per.Month);
+	result.days = Math.floor((this.seconds - (result.years * Duration.Calendar.Seconds.per.Year)
+					- (result.months * Duration.Calendar.Seconds.per.Month)) / Duration.Calendar.Seconds.per.Day);
+	result.hours = Math.floor((this.seconds - (result.years * Duration.Calendar.Seconds.per.Year)
+					- (result.months * Duration.Calendar.Seconds.per.Month)
+					- (result.days * Duration.Calendar.Seconds.per.Day)) / Duration.Calendar.Seconds.per.Hour);
+	result.minutes = Math.floor((this.seconds - (result.years * Duration.Calendar.Seconds.per.Year)
+					- (result.months * Duration.Calendar.Seconds.per.Month)
+					- (result.days * Duration.Calendar.Seconds.per.Day)
+					- (result.hours * Duration.Calendar.Seconds.per.Hour)) / Duration.Calendar.Seconds.per.Minute);
+	result.seconds = Math.round((this.seconds - (result.years * Duration.Calendar.Seconds.per.Year)
+					- (result.months * Duration.Calendar.Seconds.per.Month)
+					- (result.days * Duration.Calendar.Seconds.per.Day)
+					- (result.hours * Duration.Calendar.Seconds.per.Hour)
+					- (result.minutes * Duration.Calendar.Seconds.per.Minute)));
 	return result;
 }
 
@@ -317,22 +317,22 @@ Duration.prototype.ago = function() {
 	if (this.seconds == 0) {
 		return 'just now';
 	}
-	else if (this.seconds < this.Calendar.Seconds.per.Minute) {
+	else if (this.seconds < Duration.Calendar.Seconds.per.Minute) {
 		return this.seconds + ' second' + ((this.seconds > 1) ? 's' : '') + ' ago';
 	}
-	else if (this.seconds < this.Calendar.Seconds.per.Hour) {
+	else if (this.seconds < Duration.Calendar.Seconds.per.Hour) {
 		return Math.floor(this.inMinutes()) + ' minute' + ((this.inMinutes() > 1) ? 's' : '') + ' ago';
 	}
-	else if (this.seconds < this.Calendar.Seconds.per.Day) {
+	else if (this.seconds < Duration.Calendar.Seconds.per.Day) {
 		return Math.floor(this.inHours()) + ' hour' + ((this.inHours() > 1) ? 's' : '') + ' ago';
 	}
-	else if (this.seconds < this.Calendar.Seconds.per.Week) {
+	else if (this.seconds < Duration.Calendar.Seconds.per.Week) {
 		return Math.floor(this.inDays()) + ' day' + ((this.inDays() > 1) ? 's' : '') + ' ago';
 	}
-	else if (this.seconds < this.Calendar.Seconds.per.Month) {
+	else if (this.seconds < Duration.Calendar.Seconds.per.Month) {
 		return Math.floor(this.inWeeks()) + ' week' + ((this.inWeeks() > 1) ? 's' : '') + ' ago';
 	}
-	else if (this.seconds < this.Calendar.Seconds.per.Year) {
+	else if (this.seconds < Duration.Calendar.Seconds.per.Year) {
 		return Math.floor(this.inMonths()) + ' month' + ((this.inMonths() > 1) ? 's' : '') + ' ago';
 	}
 	else {
