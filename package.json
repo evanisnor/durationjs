@@ -1,20 +1,20 @@
 {
   "name": "durationjs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A JavaScript library for parsing and manipulating ISO 8601 formatted Duration strings.",
   "author": "leadhead9 <ewisnor@gmail.com>",
-  "main": "duration.testacular.conf.js",
+  "main": "./js/duration",
   "directories": {
     "js": "js",
     "test": "test"
   },
   "dependencies": {
     "jasmine-node": "~1.4.0",
-    "karma": "~0.8.5"
+    "karma": "~0.8"
   },
   "devDependencies": {},
   "scripts": {
-    "test" : "./node_modules/karma/bin/karma start --browsers PhantomJS --single-run"
+    "test" : "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
   },
   "repository": {
     "type": "git",
