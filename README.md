@@ -152,23 +152,24 @@ Contributing
 If you feel a burning desire to contribute to this project you may do so with some caveats:
 
 *  Write unit tests if you add features
-*  If you add files update the testacular config to include them
+*  If you add files update the karma.conf.js file to include them
 *  Work out of the develop branch and ensure your Pull Requests target develop as their destination
+*  Note that your Pull Requests will not be accepted until Travis-CI has confirmed that it passes the tests
 
 
 Running the Unit Tests
 -----------------------------
-Unit tests are written using the [Jasmine](http://pivotal.github.com/jasmine/) framework. You can run them however you like, but I use [Testacular](http://testacular.github.com/). If you would like to do the same, follow these steps:
+Unit tests are written using the [Jasmine](http://pivotal.github.com/jasmine/) framework. You can run them however you like, but I use [Karma](http://karma-runner.github.io/). If you would like to do the same, follow these steps:
 
 1.  Install [node.js](http://nodejs.org/)
 
-2.  Install the [Testacular node.js module](https://npmjs.org/package/testacular) and [Jasmine node.js module](https://npmjs.org/package/jasmine-node)
+2.  Install the [Karma node.js module](https://npmjs.org/package/karma) and [Jasmine node.js module](https://npmjs.org/package/jasmine-node)
 
 		npm install -d
 
 4.  Browse to your cloned repository directory and start Testacular
 
-		testacular start duration.testacular.conf.js
+		karma start karma.conf.js
 
 	or
 	
@@ -176,4 +177,4 @@ Unit tests are written using the [Jasmine](http://pivotal.github.com/jasmine/) f
 
 5.  Open a web browser (or a few) to the URL printed in your console. Probably http://localhost:9876
 
-6.  Watch as Testacular evaluates the tests in the /test directory that have file names matching '*.test.js'. This evaulation will execute automatically the next time you save your file modifications.
+6.  Watch as Karma evaluates the tests in the /test directory that have file names matching '*.test.js'. This evaulation will execute automatically the next time you save your file modifications.
