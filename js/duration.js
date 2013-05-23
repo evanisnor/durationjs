@@ -14,21 +14,21 @@ var Duration = function(representation) {
 	this.seconds = 0;
 
 	/* Constructor */
-	if (representation == 'undefined' || representation == undefined || representation == '') {
+	if (typeof representation === 'undefined' || representation == undefined || representation == '') {
 		representation = 0;
 	}
 	
 	if (typeof representation === 'number' && representation < 0) {
-		throw new Error(Duration.prototype.Error.NegativeValue);
+		throw new Error(Duration.Error.NegativeValue);
 	}
 	else if (typeof representation === 'number') {
 		this.seconds = representation;
 	}
 	else {
 		var isSupportedFormat = false;
-		for (var format in Duration.prototype.DurationFormat) {
-			var pattern = Duration.prototype.DurationFormat[format].pattern;
-			var parser = Duration.prototype.DurationFormat[format].parser;
+		for (var format in Duration.DurationFormat) {
+			var pattern = Duration.DurationFormat[format].pattern;
+			var parser = Duration.DurationFormat[format].parser;
 			if (pattern.test(representation)) {
 				isSupportedFormat = true;
 				this.seconds = parser(this.seconds, representation.match(pattern));
@@ -37,18 +37,18 @@ var Duration = function(representation) {
 		}
 
 		if (!isSupportedFormat) {
-			throw new Error(Duration.prototype.Error.UnexpectedFormat);
+			throw new Error(Duration.Error.UnexpectedFormat);
 		}
 	}
 
 	if (isNaN(this.seconds)) {
-		throw new Error(Duration.prototype.Error.Overflow);
+		throw new Error(Duration.Error.Overflow);
 	}
 }
 
 /* Calendar values */
 
-Duration.prototype.Calendar = {
+Duration.Calendar = {
 	Seconds : {
 		per : {
 			Minute : 60,
@@ -98,20 +98,20 @@ Duration.prototype.Calendar = {
 
 /* Error Messages */
 
-Duration.prototype.Error = {}
+Duration.Error = {}
 
-Duration.prototype.Error.UnexpectedFormat = "Unexpected duration format. Refer to ISO 8601.";
+Duration.Error.UnexpectedFormat = "Unexpected duration format. Refer to ISO 8601.";
 
-Duration.prototype.Error.NegativeValue = "Cannot create a negative duration.";
+Duration.Error.NegativeValue = "Cannot create a negative duration.";
 
-Duration.prototype.Error.Overflow = "Cannot represent a duration that large. Float overflow.";
+Duration.Error.Overflow = "Cannot represent a duration that large. Float overflow.";
 
 /* Parsing */
 
-Duration.prototype.Parser = {}
+Duration.Parser = {}
 
-Duration.prototype.Parser.Extended = function(seconds, match) {
-	var cal = Duration.prototype.Calendar;
+Duration.Parser.Extended = function(seconds, match) {
+	var cal = Duration.Calendar;
 
 	for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
 		var value = parseInt(match[groupIndex], 10);
@@ -120,31 +120,31 @@ Duration.prototype.Parser.Extended = function(seconds, match) {
 		}
 		else if (groupIndex === 2) {
 			if (value >= 12) {
-				throw new Error(Duration.prototype.Error.UnexpectedFormat);
+				throw new Error(Duration.Error.UnexpectedFormat);
 			}
 			seconds += value * cal.Seconds.per.Month;
 		}
 		else if (groupIndex === 3) {
 			if (value > 31) {
-				throw new Error(Duration.prototype.Error.UnexpectedFormat);
+				throw new Error(Duration.Error.UnexpectedFormat);
 			}
 			seconds += value * cal.Seconds.per.Day;
 		}
 		else if (groupIndex === 4) {
 			if (value >= 24) {
-				throw new Error(Duration.prototype.Error.UnexpectedFormat);
+				throw new Error(Duration.Error.UnexpectedFormat);
 			}
 			seconds += value * cal.Seconds.per.Hour;
 		}
 		else if (groupIndex === 5) {
 			if (value >= 60) {
-				throw new Error(Duration.prototype.Error.UnexpectedFormat);
+				throw new Error(Duration.Error.UnexpectedFormat);
 			}
 			seconds += value * cal.Seconds.per.Minute;
 		}
 		else if (groupIndex === 6) {
 			if (value >= 60) {
-				throw new Error(Duration.prototype.Error.UnexpectedFormat);
+				throw new Error(Duration.Error.UnexpectedFormat);
 			}
 			seconds += value;
 		}
@@ -152,10 +152,10 @@ Duration.prototype.Parser.Extended = function(seconds, match) {
 	return seconds;
 }
 
-Duration.prototype.Parser.Basic = Duration.prototype.Parser.Extended;
+Duration.Parser.Basic = Duration.Parser.Extended;
 
-Duration.prototype.Parser.StandardWeeks = function(seconds, match) {
-	var cal = Duration.prototype.Calendar;
+Duration.Parser.StandardWeeks = function(seconds, match) {
+	var cal = Duration.Calendar;
 
 	for (var i = 1; i < match.length; i++) {
 		var value = match[i];
@@ -163,17 +163,17 @@ Duration.prototype.Parser.StandardWeeks = function(seconds, match) {
 			seconds += parseInt(value.replace('W', ''), 10) * cal.Seconds.per.Week;
 		}
 		else if (/\d+[A-Z]/.test(value)) {
-			throw new Error(Duration.prototype.Error.UnexpectedFormat);
+			throw new Error(Duration.Error.UnexpectedFormat);
 		}
 	}
 	return seconds;
 }
 
-Duration.prototype.Parser.Standard = function(seconds, match) {
-	var cal = Duration.prototype.Calendar;
+Duration.Parser.Standard = function(seconds, match) {
+	var cal = Duration.Calendar;
 
 	if (match[0] === 'P' || match[0] === 'PT') {
-		throw new Error(Duration.prototype.Error.UnexpectedFormat);
+		throw new Error(Duration.Error.UnexpectedFormat);
 	}
 	
 	var hasFoundT = false;
@@ -201,28 +201,28 @@ Duration.prototype.Parser.Standard = function(seconds, match) {
 			seconds += parseInt(value.replace('S', ''), 10);
 		}
 		else if (/\d+[A-Z]/.test(value)) {
-			throw new Error(Duration.prototype.Error.UnexpectedFormat);
+			throw new Error(Duration.Error.UnexpectedFormat);
 		}
 	}
 	return seconds;
 }
 
-Duration.prototype.DurationFormat = {
+Duration.DurationFormat = {
 	Extended : {
 		pattern : /^P(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/,
-		parser : Duration.prototype.Parser.Extended
+		parser : Duration.Parser.Extended
 	},
 	Basic : {
 		pattern : /^P(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/,
-		parser : Duration.prototype.Parser.Basic
+		parser : Duration.Parser.Basic
 	},
 	StandardWeeks : {
 		pattern : /^P(\d+W)$/,
-		parser : Duration.prototype.Parser.StandardWeeks
+		parser : Duration.Parser.StandardWeeks
 	},
 	Standard : {
 		pattern : /^P(\d+Y)*(\d+M)*(\d+D)*(?:(T)(\d+H)*(\d+M)*(\d+S)*)?$/,
-		parser : Duration.prototype.Parser.Standard
+		parser : Duration.Parser.Standard
 	}
 }
 
@@ -230,7 +230,7 @@ Duration.prototype.DurationFormat = {
 Pad a value with leading zeros by specifying the desired length of the result string.
 	Example: padInt(2, 4) will return '0002'
 */
-Duration.prototype.padInt = function(value, length) {
+Duration.padInt = function(value, length) {
 	var valString = value + '';
 	var result = '';
 	
@@ -376,22 +376,22 @@ Duration.prototype.asStandardWeeks = function() {
 
 Duration.prototype.asExtended = function() {
 	var duration = this.value();
-	return 'P' + this.padInt(duration.years, 4) + '-'
-			+ this.padInt(duration.months, 2) + '-'
-			+ this.padInt(duration.days, 2) + 'T'
-			+ this.padInt(duration.hours, 2) + ':'
-			+ this.padInt(duration.minutes, 2) + ':'
-			+ this.padInt(duration.seconds, 2);
+	return 'P' + Duration.padInt(duration.years, 4) + '-'
+			+ Duration.padInt(duration.months, 2) + '-'
+			+ Duration.padInt(duration.days, 2) + 'T'
+			+ Duration.padInt(duration.hours, 2) + ':'
+			+ Duration.padInt(duration.minutes, 2) + ':'
+			+ Duration.padInt(duration.seconds, 2);
 }
 
 Duration.prototype.asBasic = function() {
 	var duration = this.value();
-	return 'P' + this.padInt(duration.years, 4)
-			+ this.padInt(duration.months, 2)
-			+ this.padInt(duration.days, 2) + 'T'
-			+ this.padInt(duration.hours, 2)
-			+ this.padInt(duration.minutes, 2)
-			+ this.padInt(duration.seconds, 2);
+	return 'P' + Duration.padInt(duration.years, 4)
+			+ Duration.padInt(duration.months, 2)
+			+ Duration.padInt(duration.days, 2) + 'T'
+			+ Duration.padInt(duration.hours, 2)
+			+ Duration.padInt(duration.minutes, 2)
+			+ Duration.padInt(duration.seconds, 2);
 }
 
 window['Duration'] = Duration;
