@@ -11,10 +11,7 @@ describe('Duration Test Suite', function() {
 	});
 
 	describe('Calendar Constants Tests', function() {
-		var duration;
-
 		beforeEach(function() {
-			duration = new Duration();
 		});
 
 		afterEach(function() {
@@ -22,43 +19,42 @@ describe('Duration Test Suite', function() {
 		});
 		
 		it("should know how many seconds are in a minute", function() {
-			expect(duration.Calendar.Seconds.per.Minute).toBe(60);
+			expect(Duration.Calendar.Seconds.per.Minute).toBe(60);
 		});
 		
 		it("should know how many seconds are in an hour", function() {
-			expect(duration.Calendar.Seconds.per.Hour).toBe(60 * 60);
+			expect(Duration.Calendar.Seconds.per.Hour).toBe(60 * 60);
 		});
 		
 		it("should know how many seconds are in a day", function() {
-			expect(duration.Calendar.Seconds.per.Day).toBe(60 * 60 * 24);
+			expect(Duration.Calendar.Seconds.per.Day).toBe(60 * 60 * 24);
 		});
 		
 		it("should know how many seconds are in a week", function() {
-			expect(duration.Calendar.Seconds.per.Week).toBe(60 * 60 * 24 * 7);
+			expect(Duration.Calendar.Seconds.per.Week).toBe(60 * 60 * 24 * 7);
 		});
 		
 		it("should know how many seconds are in a month", function() {
-			expect(duration.Calendar.Seconds.per.Month).toBe(60 * 60 * 24 * 30.4368);
+			expect(Duration.Calendar.Seconds.per.Month).toBe(60 * 60 * 24 * 30.4368);
 		});
 		
 		it("should know how many seconds are in a year", function() {
-			expect(duration.Calendar.Seconds.per.Year).toBe(60 * 60 * 24 * 365.242);
+			expect(Duration.Calendar.Seconds.per.Year).toBe(60 * 60 * 24 * 365.242);
 		});
 	});
 
 	describe('Integer Padding Tests', function() {
 		it('should pad integers with leading zeroes', function() {
-			var duration = new Duration();
-			expect(duration.padInt(1, 0)).toBe('');
-			expect(duration.padInt(1, 1)).toBe('1');
-			expect(duration.padInt(1, 2)).toBe('01');
-			expect(duration.padInt(1, 3)).toBe('001');
-			expect(duration.padInt(1, 4)).toBe('0001');
-			expect(duration.padInt(12, 0)).toBe('');
-			expect(duration.padInt(12, 1)).toBe('1');
-			expect(duration.padInt(12, 2)).toBe('12');
-			expect(duration.padInt(12, 3)).toBe('012');
-			expect(duration.padInt(12, 4)).toBe('0012');
+			expect(Duration.padInt(1, 0)).toBe('');
+			expect(Duration.padInt(1, 1)).toBe('1');
+			expect(Duration.padInt(1, 2)).toBe('01');
+			expect(Duration.padInt(1, 3)).toBe('001');
+			expect(Duration.padInt(1, 4)).toBe('0001');
+			expect(Duration.padInt(12, 0)).toBe('');
+			expect(Duration.padInt(12, 1)).toBe('1');
+			expect(Duration.padInt(12, 2)).toBe('12');
+			expect(Duration.padInt(12, 3)).toBe('012');
+			expect(Duration.padInt(12, 4)).toBe('0012');
 		});
 	});	
 
@@ -258,83 +254,83 @@ describe('Duration Test Suite', function() {
 		it ("should fail to parse improperly formatted duration strings", function() {
 			expect(function() {
 				new Duration("this is garbage data lol");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 			
 			expect(function() {
 				new Duration("*(^#$JDJ34h fw5ad..6fjw#D 343");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P20S");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P3Y6W");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P3Y6S");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P4Z9JT2S");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P271Y-13M-400DT25H:61M:61S");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P0001-01-01T01:01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P01-01T01:01:01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P0001-01-01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("PT01:01:01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("PT01:01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P0001-12-01T01:01:01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P0001-01-32T01:01:01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P0001-01-01T24:01:01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P0001-01-01T01:60:01");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P0001-01-01T01:01:60");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P0001-13-32T25:60:60");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("P");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 
 			expect(function() {
 				new Duration("PT");
-			}).toThrow(Duration.UNEXPECTED_FORMAT_ERROR);
+			}).toThrow(Duration.Error.UnexpectedFormat);
 		});
 	});
 
