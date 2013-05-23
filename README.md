@@ -167,7 +167,7 @@ Unit tests are written using the [Jasmine](http://pivotal.github.com/jasmine/) f
 
 		npm install -d
 
-4.  Browse to your cloned repository directory and start Testacular
+4.  Browse to your cloned repository directory and start Karma
 
 		karma start karma.conf.js
 
