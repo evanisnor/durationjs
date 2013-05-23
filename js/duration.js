@@ -6,7 +6,47 @@ A JavaScript library for parsing and manipulating ISO 8601 formatted duration st
 Licensed under The MIT License (MIT)
 */
 
-var Calendar = {
+var Duration = function(representation) {
+	/* Fields */
+	this.seconds = 0;
+
+	/* Constructor */
+	if (representation == 'undefined' || representation == undefined || representation == '') {
+		representation = 0;
+	}
+	
+	if (typeof representation === 'number' && representation < 0) {
+		throw new Error(this.NEGATIVE_VALUE_ERROR);
+	}
+	else if (typeof representation === 'number') {
+		this.seconds = representation;
+	}
+	else {
+		var isSupportedFormat = false;
+		for (var format in this.DurationFormat) {
+			var pattern = this.DurationFormat[format].pattern;
+			var parser = this.DurationFormat[format].parser;
+			if (pattern.test(representation)) {
+				isSupportedFormat = true;
+				this.seconds = parser(this.seconds, representation.match(pattern));
+				break;
+			}
+		}
+
+		if (!isSupportedFormat) {
+			throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+		}
+	}
+
+	if (this.seconds == NaN) {
+		throw new Error(this.OVERFLOW_ERROR);
+
+	}
+}
+
+/* Calendar values */
+
+Duration.prototype.Calendar = {
 	Seconds : {
 		per : {
 			Minute : 60,
@@ -52,13 +92,139 @@ var Calendar = {
 			Year : 12
 		}
 	}
-};
+}
+
+/* Error Messages */
+
+Duration.prototype.UNEXPECTED_FORMAT_ERROR = "Unexpected duration format. Refer to ISO 8601.";
+Duration.prototype.NEGATIVE_VALUE_ERROR = "Cannot create a negative duration.";
+Duration.prototype.OVERFLOW_ERROR = "Cannot represent a duration that large. Float overflow.";
+
+/* Parsing */
+
+Duration.prototype.Parser = {}
+
+Duration.prototype.Parser.Extended = function(seconds, match) {
+	var cal = Duration.prototype.Calendar;
+
+	for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
+		var value = parseInt(match[groupIndex], 10);
+		if (groupIndex === 1) {
+			seconds += value * cal.Seconds.per.Year;
+		}
+		else if (groupIndex === 2) {
+			if (value >= 12) {
+				throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+			}
+			seconds += value * cal.Seconds.per.Month;
+		}
+		else if (groupIndex === 3) {
+			if (value > 31) {
+				throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+			}
+			seconds += value * cal.Seconds.per.Day;
+		}
+		else if (groupIndex === 4) {
+			if (value >= 24) {
+				throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+			}
+			seconds += value * cal.Seconds.per.Hour;
+		}
+		else if (groupIndex === 5) {
+			if (value >= 60) {
+				throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+			}
+			seconds += value * cal.Seconds.per.Minute;
+		}
+		else if (groupIndex === 6) {
+			if (value >= 60) {
+				throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+			}
+			seconds += value;
+		}
+	}
+	return seconds;
+}
+
+Duration.prototype.Parser.Basic = Duration.prototype.Parser.Extended;
+
+Duration.prototype.Parser.StandardWeeks = function(seconds, match) {
+	var cal = Duration.prototype.Calendar;
+
+	for (var i = 1; i < match.length; i++) {
+		var value = match[i];
+		if (/\d+W/.test(value)) {
+			seconds += parseInt(value.replace('W', ''), 10) * cal.Seconds.per.Week;
+		}
+		else if (/\d+[A-Z]/.test(value)) {
+			throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+		}
+	}
+	return seconds;
+}
+
+Duration.prototype.Parser.Standard = function(seconds, match) {
+	var cal = Duration.prototype.Calendar;
+
+	if (match[0] === 'P' || match[0] === 'PT') {
+		throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+	}
+	
+	var hasFoundT = false;
+	for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
+		var value = match[groupIndex];
+		if (/T/.test(value)) {
+			hasFoundT = true;
+		}
+		else if (/\d+Y/.test(value)) {
+			seconds += parseInt(value.replace('Y', ''), 10) * cal.Seconds.per.Year;
+		}
+		else if (/\d+M/.test(value) && !hasFoundT) {
+			seconds += parseInt(value.replace('M', ''), 10) * cal.Seconds.per.Month;
+		}
+		else if (/\d+D/.test(value)) {
+			seconds += parseInt(value.replace('D', ''), 10) * cal.Seconds.per.Day;
+		}
+		else if (/\d+H/.test(value)) {
+			seconds += parseInt(value.replace('H', ''), 10) * cal.Seconds.per.Hour;
+		}
+		else if (/\d+M/.test(value) && hasFoundT) {
+			seconds += parseInt(value.replace('M', ''), 10) * cal.Seconds.per.Minute;
+		}
+		else if (/\d+S/.test(value)) {
+			seconds += parseInt(value.replace('S', ''), 10);
+		}
+		else if (/\d+[A-Z]/.test(value)) {
+			throw new Error(this.UNEXPECTED_FORMAT_ERROR);
+		}
+	}
+	return seconds;
+}
+
+Duration.prototype.DurationFormat = {
+	Extended : {
+		pattern : /^P(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/,
+		parser : Duration.prototype.Parser.Extended
+	},
+	Basic : {
+		pattern : /^P(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/,
+		parser : Duration.prototype.Parser.Basic
+	},
+	StandardWeeks : {
+		pattern : /^P(\d+W)$/,
+		parser : Duration.prototype.Parser.StandardWeeks
+	},
+	Standard : {
+		pattern : /^P(\d+Y)*(\d+M)*(\d+D)*(?:(T)(\d+H)*(\d+M)*(\d+S)*)?$/,
+		parser : Duration.prototype.Parser.Standard
+	}
+}
 
 /*
 Pad a value with leading zeros by specifying the desired length of the result string.
 	Example: padInt(2, 4) will return '0002'
 */
-var padInt = function(value, length) {
+Duration.prototype.padInt = function(value, length) {
 	var valString = value + '';
 	var result = '';
 	
@@ -75,295 +241,149 @@ var padInt = function(value, length) {
 	return result;
 }
 
-var Duration = function(representation) {
-	var self = this;
+/* Cumulative getters */
 
-	/* Fields */
+Duration.prototype.inSeconds = function() {
+	return this.seconds;
+}
 
-	self.seconds = 0;
+Duration.prototype.inMinutes = function() {
+	return this.seconds / this.Calendar.Seconds.per.Minute;
+}
 
-	/* Error Messages */
+Duration.prototype.inHours = function() {
+	return this.seconds / this.Calendar.Seconds.per.Hour;
+}
 
-	self.UNEXPECTED_FORMAT_ERROR = "Unexpected duration format. Refer to ISO 8601.";
-	self.NEGATIVE_VALUE_ERROR = "Cannot create a negative duration.";
-	self.OVERFLOW_ERROR = "Cannot represent a duration that large. Float overflow.";
+Duration.prototype.inDays = function() {
+	return this.seconds / this.Calendar.Seconds.per.Day;
+}
 
-	/* Parsing */
+Duration.prototype.inWeeks = function() {
+	return this.seconds / this.Calendar.Seconds.per.Week;
+}
 
-	self.DurationFormat = {
-		Extended : /^P(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/,
-		Basic : /^P(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/,
-		StandardWeeks : /^P(\d+W)$/,
-		Standard : /^P(\d+Y)*(\d+M)*(\d+D)*(?:(T)(\d+H)*(\d+M)*(\d+S)*)?$/
-	};
+Duration.prototype.inMonths = function() {
+	return this.seconds / this.Calendar.Seconds.per.Month;
+}
 
-	self.parse = function(pattern, match) {
-		if (pattern === self.DurationFormat.StandardWeeks) {
-			for (var i = 1; i < match.length; i++) {
-				var value = match[i];
-				if (/\d+W/.test(value)) {
-					self.seconds += parseInt(value.replace('W', ''), 10) * Calendar.Seconds.per.Week;
-				}
-				else if (/\d+[A-Z]/.test(value)) {
-					throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-				}
-			}
-		}
-		else if (pattern === self.DurationFormat.Standard) {
-			if (match[0] === 'P' || match[0] === 'PT') {
-				throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-			}
-			
-			var hasFoundT = false;
-			for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
-				var value = match[groupIndex];
-				if (/T/.test(value)) {
-					hasFoundT = true;
-				}
-				else if (/\d+Y/.test(value)) {
-					self.seconds += parseInt(value.replace('Y', ''), 10) * Calendar.Seconds.per.Year;
-				}
-				else if (/\d+M/.test(value) && !hasFoundT) {
-					self.seconds += parseInt(value.replace('M', ''), 10) * Calendar.Seconds.per.Month;
-				}
-				else if (/\d+D/.test(value)) {
-					self.seconds += parseInt(value.replace('D', ''), 10) * Calendar.Seconds.per.Day;
-				}
-				else if (/\d+H/.test(value)) {
-					self.seconds += parseInt(value.replace('H', ''), 10) * Calendar.Seconds.per.Hour;
-				}
-				else if (/\d+M/.test(value) && hasFoundT) {
-					self.seconds += parseInt(value.replace('M', ''), 10) * Calendar.Seconds.per.Minute;
-				}
-				else if (/\d+S/.test(value)) {
-					self.seconds += parseInt(value.replace('S', ''), 10);
-				}
-				else if (/\d+[A-Z]/.test(value)) {
-					throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-				}
-			}
-		}
-		else if (pattern === self.DurationFormat.Extended
-			|| pattern === self.DurationFormat.Basic) {
-			
-			for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
-				var value = parseInt(match[groupIndex], 10);
-				if (groupIndex === 1) {
-					self.seconds += value * Calendar.Seconds.per.Year;
-				}
-				else if (groupIndex === 2) {
-					if (value >= 12) {
-						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-					}
-					self.seconds += value * Calendar.Seconds.per.Month;
-				}
-				else if (groupIndex === 3) {
-					if (value > 31) {
-						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-					}
-					self.seconds += value * Calendar.Seconds.per.Day;
-				}
-				else if (groupIndex === 4) {
-					if (value >= 24) {
-						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-					}
-					self.seconds += value * Calendar.Seconds.per.Hour;
-				}
-				else if (groupIndex === 5) {
-					if (value >= 60) {
-						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-					}
-					self.seconds += value * Calendar.Seconds.per.Minute;
-				}
-				else if (groupIndex === 6) {
-					if (value >= 60) {
-						throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-					}
-					self.seconds += value;
-				}
-			}
-		}
+Duration.prototype.inYears = function() {
+	return this.seconds / this.Calendar.Seconds.per.Year;
+}
+
+/* Arithmetic */
+
+Duration.prototype.add = function(other) {
+	return new Duration(this.seconds + other.seconds);
+}
+
+Duration.prototype.subtract = function(other) {
+	return new Duration(this.seconds - other.seconds);
+}
+
+/* Formatted getters */
+
+/*
+Returns an object that represents the full duration with integer values.
+*/
+Duration.prototype.value = function() {
+	var result = {};
+	result.years = Math.floor(this.seconds / this.Calendar.Seconds.per.Year);
+	result.months = Math.floor((this.seconds - (result.years * this.Calendar.Seconds.per.Year)) / this.Calendar.Seconds.per.Month);
+	result.days = Math.floor((this.seconds - (result.years * this.Calendar.Seconds.per.Year)
+					- (result.months * this.Calendar.Seconds.per.Month)) / this.Calendar.Seconds.per.Day);
+	result.hours = Math.floor((this.seconds - (result.years * this.Calendar.Seconds.per.Year)
+					- (result.months * this.Calendar.Seconds.per.Month)
+					- (result.days * this.Calendar.Seconds.per.Day)) / this.Calendar.Seconds.per.Hour);
+	result.minutes = Math.floor((this.seconds - (result.years * this.Calendar.Seconds.per.Year)
+					- (result.months * this.Calendar.Seconds.per.Month)
+					- (result.days * this.Calendar.Seconds.per.Day)
+					- (result.hours * this.Calendar.Seconds.per.Hour)) / this.Calendar.Seconds.per.Minute);
+	result.seconds = Math.round((this.seconds - (result.years * this.Calendar.Seconds.per.Year)
+					- (result.months * this.Calendar.Seconds.per.Month)
+					- (result.days * this.Calendar.Seconds.per.Day)
+					- (result.hours * this.Calendar.Seconds.per.Hour)
+					- (result.minutes * this.Calendar.Seconds.per.Minute)));
+	return result;
+}
+
+Duration.prototype.ago = function() {
+	if (this.seconds == 0) {
+		return 'just now';
 	}
-
-	/* Constructor */
-
-	if (representation == 'undefined' || representation == undefined || representation == '') {
-		representation = 0;
+	else if (this.seconds < this.Calendar.Seconds.per.Minute) {
+		return this.seconds + ' second' + ((this.seconds > 1) ? 's' : '') + ' ago';
 	}
-	
-	if (typeof representation === 'number' && representation < 0) {
-		throw new Error(self.NEGATIVE_VALUE_ERROR);
+	else if (this.seconds < this.Calendar.Seconds.per.Hour) {
+		return Math.floor(this.inMinutes()) + ' minute' + ((this.inMinutes() > 1) ? 's' : '') + ' ago';
 	}
-	else if (typeof representation === 'number') {
-		self.seconds = representation;
+	else if (this.seconds < this.Calendar.Seconds.per.Day) {
+		return Math.floor(this.inHours()) + ' hour' + ((this.inHours() > 1) ? 's' : '') + ' ago';
+	}
+	else if (this.seconds < this.Calendar.Seconds.per.Week) {
+		return Math.floor(this.inDays()) + ' day' + ((this.inDays() > 1) ? 's' : '') + ' ago';
+	}
+	else if (this.seconds < this.Calendar.Seconds.per.Month) {
+		return Math.floor(this.inWeeks()) + ' week' + ((this.inWeeks() > 1) ? 's' : '') + ' ago';
+	}
+	else if (this.seconds < this.Calendar.Seconds.per.Year) {
+		return Math.floor(this.inMonths()) + ' month' + ((this.inMonths() > 1) ? 's' : '') + ' ago';
 	}
 	else {
-		var isSupportedFormat = false;
-		for (var format in self.DurationFormat) {
-			if (self.DurationFormat.hasOwnProperty(format)) {
-				var pattern = self.DurationFormat[format];
-				if (pattern.test(representation)) {
-					isSupportedFormat = true;
-					self.parse(pattern, representation.match(pattern));
-					break;
-				}
-			}
-		}
+		return Math.floor(this.inYears()) + ' year' + ((this.inYears() > 1) ? 's' : '') + ' ago';
+	}
+}
 
-		if (!isSupportedFormat) {
-			throw new Error(self.UNEXPECTED_FORMAT_ERROR);
-		}
+Duration.prototype.asClock = function() {
+	var duration = this.value();
+	if (duration.hours == 0) {
+		return duration.minutes + ':'
+			+ ((duration.seconds < 10) ? '0' + duration.seconds : duration.seconds);
+	}
+	else {
+		return duration.hours + ':'
+			+ ((duration.minutes < 10) ? '0' + duration.minutes : duration.minutes) + ':'
+			+ ((duration.seconds < 10) ? '0' + duration.seconds : duration.seconds);
+	}
+}
+
+Duration.prototype.asStandard = function() {
+	var duration = this.value();
+	if (this.seconds == 0) {
+		return 'PT0S';
 	}
 
-	if (self.seconds == NaN) {
-		throw new Error(self.OVERFLOW_ERROR);
+	var shouldHaveT = duration.hours > 0 || duration.minutes > 0 || duration.seconds > 0;
 
-	}
+	return 'P' + ((duration.years > 0) ? duration.years + 'Y' : '')
+			+ ((duration.months > 0) ? duration.months + 'M' : '')
+			+ ((duration.days > 0) ? duration.days + 'D' : '')
+			+ ((shouldHaveT) ? 'T' : '')
+			+ ((duration.hours > 0) ? duration.hours + 'H' : '')
+			+ ((duration.minutes > 0) ? duration.minutes + 'M' : '')
+			+ ((duration.seconds > 0) ? duration.seconds + 'S' : '');
+}
 
-	/* Cumulative getters */
+Duration.prototype.asStandardWeeks = function() {
+	return 'P' + Math.floor(this.inWeeks()) + 'W';
+}
 
-	self.inSeconds = function() {
-		return self.seconds;
-	}
+Duration.prototype.asExtended = function() {
+	var duration = this.value();
+	return 'P' + this.padInt(duration.years, 4) + '-'
+			+ this.padInt(duration.months, 2) + '-'
+			+ this.padInt(duration.days, 2) + 'T'
+			+ this.padInt(duration.hours, 2) + ':'
+			+ this.padInt(duration.minutes, 2) + ':'
+			+ this.padInt(duration.seconds, 2);
+}
 
-	self.inMinutes = function() {
-		return self.seconds / Calendar.Seconds.per.Minute;
-	}
-
-	self.inHours = function() {
-		return self.seconds / Calendar.Seconds.per.Hour;
-	}
-
-	self.inDays = function() {
-		return self.seconds / Calendar.Seconds.per.Day;
-	}
-
-	self.inWeeks = function() {
-		return self.seconds / Calendar.Seconds.per.Week;
-	}
-
-	self.inMonths = function() {
-		return self.seconds / Calendar.Seconds.per.Month;
-	}
-
-	self.inYears = function() {
-		return self.seconds / Calendar.Seconds.per.Year;
-	}
-
-	/* Arithmetic */
-
-	self.add = function(other) {
-		return new Duration(self.seconds + other.seconds);
-	}
-
-	self.subtract = function(other) {
-		return new Duration(self.seconds - other.seconds);
-	}
-
-	/* Formatted getters */
-
-	/*
-	Returns an object that represents the full duration with integer values.
-	*/
-	self.value = function() {
-		var result = {};
-		result.years = Math.floor(self.seconds / Calendar.Seconds.per.Year);
-		result.months = Math.floor((self.seconds - (result.years * Calendar.Seconds.per.Year)) / Calendar.Seconds.per.Month);
-		result.days = Math.floor((self.seconds - (result.years * Calendar.Seconds.per.Year)
-						- (result.months * Calendar.Seconds.per.Month)) / Calendar.Seconds.per.Day);
-		result.hours = Math.floor((self.seconds - (result.years * Calendar.Seconds.per.Year)
-						- (result.months * Calendar.Seconds.per.Month)
-						- (result.days * Calendar.Seconds.per.Day)) / Calendar.Seconds.per.Hour);
-		result.minutes = Math.floor((self.seconds - (result.years * Calendar.Seconds.per.Year)
-						- (result.months * Calendar.Seconds.per.Month)
-						- (result.days * Calendar.Seconds.per.Day)
-						- (result.hours * Calendar.Seconds.per.Hour)) / Calendar.Seconds.per.Minute);
-		result.seconds = Math.round((self.seconds - (result.years * Calendar.Seconds.per.Year)
-						- (result.months * Calendar.Seconds.per.Month)
-						- (result.days * Calendar.Seconds.per.Day)
-						- (result.hours * Calendar.Seconds.per.Hour)
-						- (result.minutes * Calendar.Seconds.per.Minute)));
-		return result;
-	}
-
-	self.ago = function() {
-		if (self.seconds == 0) {
-			return 'just now';
-		}
-		else if (self.seconds < Calendar.Seconds.per.Minute) {
-			return self.seconds + ' second' + ((self.seconds > 1) ? 's' : '') + ' ago';
-		}
-		else if (self.seconds < Calendar.Seconds.per.Hour) {
-			return Math.floor(self.inMinutes()) + ' minute' + ((self.inMinutes() > 1) ? 's' : '') + ' ago';
-		}
-		else if (self.seconds < Calendar.Seconds.per.Day) {
-			return Math.floor(self.inHours()) + ' hour' + ((self.inHours() > 1) ? 's' : '') + ' ago';
-		}
-		else if (self.seconds < Calendar.Seconds.per.Week) {
-			return Math.floor(self.inDays()) + ' day' + ((self.inDays() > 1) ? 's' : '') + ' ago';
-		}
-		else if (self.seconds < Calendar.Seconds.per.Month) {
-			return Math.floor(self.inWeeks()) + ' week' + ((self.inWeeks() > 1) ? 's' : '') + ' ago';
-		}
-		else if (self.seconds < Calendar.Seconds.per.Year) {
-			return Math.floor(self.inMonths()) + ' month' + ((self.inMonths() > 1) ? 's' : '') + ' ago';
-		}
-		else {
-			return Math.floor(self.inYears()) + ' year' + ((self.inYears() > 1) ? 's' : '') + ' ago';
-		}
-	}
-
-	self.asClock = function() {
-		var duration = self.value();
-		if (duration.hours == 0) {
-			return duration.minutes + ':'
-				+ ((duration.seconds < 10) ? '0' + duration.seconds : duration.seconds);
-		}
-		else {
-			return duration.hours + ':'
-				+ ((duration.minutes < 10) ? '0' + duration.minutes : duration.minutes) + ':'
-				+ ((duration.seconds < 10) ? '0' + duration.seconds : duration.seconds);
-		}
-	}
-
-	self.asStandard = function() {
-		var duration = self.value();
-		if (self.seconds == 0) {
-			return 'PT0S';
-		}
-
-		var shouldHaveT = duration.hours > 0 || duration.minutes > 0 || duration.seconds > 0;
-
-		return 'P' + ((duration.years > 0) ? duration.years + 'Y' : '')
-				+ ((duration.months > 0) ? duration.months + 'M' : '')
-				+ ((duration.days > 0) ? duration.days + 'D' : '')
-				+ ((shouldHaveT) ? 'T' : '')
-				+ ((duration.hours > 0) ? duration.hours + 'H' : '')
-				+ ((duration.minutes > 0) ? duration.minutes + 'M' : '')
-				+ ((duration.seconds > 0) ? duration.seconds + 'S' : '');
-	}
-
-	self.asStandardWeeks = function() {
-		return 'P' + Math.floor(self.inWeeks()) + 'W';
-	}
-
-	self.asExtended = function() {
-		var duration = self.value();
-		return 'P' + padInt(duration.years, 4) + '-'
-				+ padInt(duration.months, 2) + '-'
-				+ padInt(duration.days, 2) + 'T'
-				+ padInt(duration.hours, 2) + ':'
-				+ padInt(duration.minutes, 2) + ':'
-				+ padInt(duration.seconds, 2);
-	}
-
-	self.asBasic = function() {
-		var duration = self.value();
-		return 'P' + padInt(duration.years, 4)
-				+ padInt(duration.months, 2)
-				+ padInt(duration.days, 2) + 'T'
-				+ padInt(duration.hours, 2)
-				+ padInt(duration.minutes, 2)
-				+ padInt(duration.seconds, 2);
-	}
+Duration.prototype.asBasic = function() {
+	var duration = this.value();
+	return 'P' + this.padInt(duration.years, 4)
+			+ this.padInt(duration.months, 2)
+			+ this.padInt(duration.days, 2) + 'T'
+			+ this.padInt(duration.hours, 2)
+			+ this.padInt(duration.minutes, 2)
+			+ this.padInt(duration.seconds, 2);
 }

@@ -22,42 +22,43 @@ describe('Duration Test Suite', function() {
 		});
 		
 		it("should know how many seconds are in a minute", function() {
-			expect(Calendar.Seconds.per.Minute).toBe(60);
+			expect(duration.Calendar.Seconds.per.Minute).toBe(60);
 		});
 		
 		it("should know how many seconds are in an hour", function() {
-			expect(Calendar.Seconds.per.Hour).toBe(60 * 60);
+			expect(duration.Calendar.Seconds.per.Hour).toBe(60 * 60);
 		});
 		
 		it("should know how many seconds are in a day", function() {
-			expect(Calendar.Seconds.per.Day).toBe(60 * 60 * 24);
+			expect(duration.Calendar.Seconds.per.Day).toBe(60 * 60 * 24);
 		});
 		
 		it("should know how many seconds are in a week", function() {
-			expect(Calendar.Seconds.per.Week).toBe(60 * 60 * 24 * 7);
+			expect(duration.Calendar.Seconds.per.Week).toBe(60 * 60 * 24 * 7);
 		});
 		
 		it("should know how many seconds are in a month", function() {
-			expect(Calendar.Seconds.per.Month).toBe(60 * 60 * 24 * 30.4368);
+			expect(duration.Calendar.Seconds.per.Month).toBe(60 * 60 * 24 * 30.4368);
 		});
 		
 		it("should know how many seconds are in a year", function() {
-			expect(Calendar.Seconds.per.Year).toBe(60 * 60 * 24 * 365.242);
+			expect(duration.Calendar.Seconds.per.Year).toBe(60 * 60 * 24 * 365.242);
 		});
 	});
 
 	describe('Integer Padding Tests', function() {
 		it('should pad integers with leading zeroes', function() {
-			expect(padInt(1, 0)).toBe('');
-			expect(padInt(1, 1)).toBe('1');
-			expect(padInt(1, 2)).toBe('01');
-			expect(padInt(1, 3)).toBe('001');
-			expect(padInt(1, 4)).toBe('0001');
-			expect(padInt(12, 0)).toBe('');
-			expect(padInt(12, 1)).toBe('1');
-			expect(padInt(12, 2)).toBe('12');
-			expect(padInt(12, 3)).toBe('012');
-			expect(padInt(12, 4)).toBe('0012');
+			var duration = new Duration();
+			expect(duration.padInt(1, 0)).toBe('');
+			expect(duration.padInt(1, 1)).toBe('1');
+			expect(duration.padInt(1, 2)).toBe('01');
+			expect(duration.padInt(1, 3)).toBe('001');
+			expect(duration.padInt(1, 4)).toBe('0001');
+			expect(duration.padInt(12, 0)).toBe('');
+			expect(duration.padInt(12, 1)).toBe('1');
+			expect(duration.padInt(12, 2)).toBe('12');
+			expect(duration.padInt(12, 3)).toBe('012');
+			expect(duration.padInt(12, 4)).toBe('0012');
 		});
 	});	
 
