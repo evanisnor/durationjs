@@ -10,11 +10,11 @@
   },
   "dependencies": {
     "jasmine-node": "~1.4.0",
-    "testacular": "~0.6.0"
+    "karma": "~0.8.5"
   },
   "devDependencies": {},
   "scripts": {
-    "test" : "./node_modules/.bin/karma start --browsers Firefox --single-run"
+    "test" : "./node_modules/karma/bin/karma start --browsers PhantomJS --single-run"
   },
   "repository": {
     "type": "git",
