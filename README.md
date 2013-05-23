@@ -2,6 +2,14 @@ duration.js
 =============================
 A JavaScript library for parsing and manipulating ISO 8601 formatted duration strings.
 
+Status
+-----------------------------
+Master:
+[![Build Status](https://travis-ci.org/leadhead9/durationjs.png?branch=master)](https://travis-ci.org/leadhead9/durationjs)
+
+Development:
+[![Build Status](https://travis-ci.org/leadhead9/durationjs.png?branch=develop)](https://travis-ci.org/leadhead9/durationjs)
+
 Features
 -----------------------------
 *  Parsing available for three duration string formats:

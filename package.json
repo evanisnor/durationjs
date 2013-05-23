@@ -1,25 +1,25 @@
 {
   "name": "durationjs",
-  "version": "0.0.1",
-  "description": "A JavaScript library for parsing and handling ISO 8601 formatted Duration strings.",
-  "main": "duration.testacular.conf.js",
+  "version": "1.1.0",
+  "description": "A JavaScript library for parsing and manipulating ISO 8601 formatted Duration strings.",
+  "author": "leadhead9 <ewisnor@gmail.com>",
+  "main": "./js/duration",
   "directories": {
+    "js": "js",
     "test": "test"
   },
   "dependencies": {
     "jasmine-node": "~1.4.0",
-    "testacular": "~0.6.0"
+    "karma": "~0.8"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "testacular start duration.testacular.conf.js"
+    "test" : "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/desimone/durationjs.git"
+    "url": "git://github.com/leadhead9/durationjs.git"
   },
-  "author": "",
   "license": "MIT",
-  "readmeFilename": "README.md",
-  "gitHead": "a3c0c4c60888d82c80f077683591596cbf9a52b0"
+  "readmeFilename": "README.md"
 }
