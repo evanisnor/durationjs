@@ -2,44 +2,64 @@
 
 describe('Duration Test Suite', function() {
 
-	beforeEach(function() {
+	describe('Calendar Tests', function() {
+		var now;
 
-	});
-
-	afterEach(function() {
-
-	});
-
-	describe('Calendar Constants Tests', function() {
 		beforeEach(function() {
-		});
-
-		afterEach(function() {
-
+			now = new Date(Date.now());
 		});
 		
 		it("should know how many seconds are in a minute", function() {
-			expect(Duration.Calendar.Seconds.per.Minute).toBe(60);
+			expect(Duration.Calendar.now().Seconds.per.Minute).toBe(60);
 		});
 		
 		it("should know how many seconds are in an hour", function() {
-			expect(Duration.Calendar.Seconds.per.Hour).toBe(60 * 60);
+			expect(Duration.Calendar.now().Seconds.per.Hour).toBe(60 * 60);
 		});
 		
 		it("should know how many seconds are in a day", function() {
-			expect(Duration.Calendar.Seconds.per.Day).toBe(60 * 60 * 24);
+			expect(Duration.Calendar.now().Seconds.per.Day).toBe(60 * 60 * 24);
 		});
 		
 		it("should know how many seconds are in a week", function() {
-			expect(Duration.Calendar.Seconds.per.Week).toBe(60 * 60 * 24 * 7);
+			expect(Duration.Calendar.now().Seconds.per.Week).toBe(60 * 60 * 24 * 7);
 		});
 		
 		it("should know how many seconds are in a month", function() {
-			expect(Duration.Calendar.Seconds.per.Month).toBe(60 * 60 * 24 * 30.4368);
+			var daysThisMonth = 0;
+			switch (now.getMonth()) {
+				case 0 : 
+					daysThisMonth = 31;
+				case 1 : 
+					daysThisMonth = (new Date(now.getYear(), 1, 29).getMonth() == 1) ? 29 : 28;
+				case 2 : 
+					daysThisMonth = 31;
+				case 3 : 
+					daysThisMonth = 30;
+				case 4 : 
+					daysThisMonth = 31;
+				case 5 : 
+					daysThisMonth = 30;
+				case 6 : 
+					daysThisMonth = 31;
+				case 7 : 
+					daysThisMonth = 31;
+				case 8 : 
+					daysThisMonth = 30;
+				case 9 : 
+					daysThisMonth = 31;
+				case 10 : 
+					daysThisMonth = 30;
+				case 11 : 
+					daysThisMonth = 31;
+			}
+
+			expect(Duration.Calendar.now().Seconds.per.Month).toBe(60 * 60 * 24 * daysThisMonth);
 		});
 		
 		it("should know how many seconds are in a year", function() {
-			expect(Duration.Calendar.Seconds.per.Year).toBe(60 * 60 * 24 * 365.242);
+			var daysThisYear = (new Date(now.getYear(), 1, 29).getMonth() == 1) ? 366 : 365;
+			expect(Duration.Calendar.now().Seconds.per.Year).toBe(60 * 60 * 24 * daysThisYear);
 		});
 	});
 
@@ -623,6 +643,46 @@ describe('Duration Test Suite', function() {
 			expect((new Duration('PT3S')).asExtended()).toBe('P0000-00-00T00:00:03');
 			expect((new Duration('PT3S')).asBasic()).toBe('P00000000T000003');
 			
+		});
+	});
+
+	describe('Date comparison & constructor tests', function() {
+
+		it('should parse the Time duration between two Date objects', function() {
+			for (var s = 0; s < Duration.Calendar.now().Seconds.per.Day; s += 10) {
+				expect(new Duration(new Date(0), new Date(s * 1000)).seconds).toBe(s)
+			}
+		});
+
+		it('should parse the Day duration between two Date objects', function() {
+			var start = new Date("Wed, 01 Jan 1995 00:00:00 GMT");
+			var cal = new Duration.Calendar(start);
+
+			for (var d = 1; d <= cal.Days.per.Month; d++) {
+				var end = new Date("Wed, " + d + " Jan 1995 00:00:00 GMT");
+				var duration = new Duration(start, end);
+
+
+				expect(duration.seconds).toBe(cal.Seconds.per.Day * d);
+			}
+
+			// expect((new Duration(new Date("Wed, 09 Aug 1995 00:00:00 GMT"), new Date("Wed, 10 Aug 1995 00:00:00 GMT"))).seconds).toBe(1 * Duration.Calendar.Seconds.per.Day);
+			// expect((new Duration(new Date("Wed, 10 Aug 1995 00:00:00 GMT"), new Date("Wed, 09 Aug 1995 00:00:00 GMT"))).seconds).toBe(1 * Duration.Calendar.Seconds.per.Day);
+			// expect((new Duration(new Date("Wed, 09 Aug 1995 00:00:00 GMT"), new Date("Wed, 11 Aug 1995 00:00:00 GMT"))).seconds).toBe(2 * Duration.Calendar.Seconds.per.Day);
+			// expect((new Duration(new Date("Wed, 11 Aug 1995 00:00:00 GMT"), new Date("Wed, 09 Aug 1995 00:00:00 GMT"))).seconds).toBe(2 * Duration.Calendar.Seconds.per.Day);
+
+			// expect((new Duration(new Date("Wed, 09 Aug 1995 00:00:00 GMT"), new Date("Wed, 09 Sep 1995 00:00:00 GMT"))).seconds).toBe(1 * Duration.Calendar.Seconds.per.Month);
+			// expect((new Duration(new Date("Wed, 09 Sep 1995 00:00:00 GMT"), new Date("Wed, 09 Aug 1995 00:00:00 GMT"))).seconds).toBe(1 * Duration.Calendar.Seconds.per.Month);
+			// expect((new Duration(new Date("Wed, 09 Aug 1995 00:00:00 GMT"), new Date("Wed, 09 Oct 1995 00:00:00 GMT"))).seconds).toBe(1 * Duration.Calendar.Seconds.per.Month);
+			// expect((new Duration(new Date("Wed, 09 Oct 1995 00:00:00 GMT"), new Date("Wed, 09 Aug 1995 00:00:00 GMT"))).seconds).toBe(1 * Duration.Calendar.Seconds.per.Month);
+
+			// expect((new Duration(new Date("Wed, 09 Aug 1995 00:00:00 GMT"), new Date("Wed, 09 Aug 1996 00:00:00 GMT"))).seconds).toBe(1 * Duration.Calendar.Seconds.per.Year);
+			// expect((new Duration(new Date("Wed, 09 Aug 1996 00:00:00 GMT"), new Date("Wed, 09 Aug 1995 00:00:00 GMT"))).seconds).toBe(1 * Duration.Calendar.Seconds.per.Year);
+			// expect((new Duration(new Date("Wed, 09 Aug 1995 00:00:00 GMT"), new Date("Wed, 09 Aug 1997 00:00:00 GMT"))).seconds).toBe(2 * Duration.Calendar.Seconds.per.Year);
+			// expect((new Duration(new Date("Wed, 09 Aug 1997 00:00:00 GMT"), new Date("Wed, 09 Aug 1995 00:00:00 GMT"))).seconds).toBe(2 * Duration.Calendar.Seconds.per.Year);
+			// expect((new Duration(new Date("Wed, 09 Aug 1995 00:00:00 GMT"), new Date("Wed, 09 Aug 1997 05:00:00 GMT"))).seconds).toBe(2 * Duration.Calendar.Seconds.per.Year + 5 * Duration.Calendar.Seconds.per.Hour);
+			// expect((new Duration(new Date("Wed, 09 Aug 1997 05:00:00 GMT"), new Date("Wed, 09 Aug 1995 00:00:00 GMT"))).seconds).toBe(2 * Duration.Calendar.Seconds.per.Year + 5 * Duration.Calendar.Seconds.per.Hour);
+
 		});
 	});
 });
