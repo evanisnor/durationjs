@@ -321,22 +321,22 @@ Duration.prototype.ago = function() {
 		return this.seconds + ' second' + ((this.seconds > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Hour) {
-		return Math.floor(this.inMinutes()) + ' minute' + ((this.inMinutes() > 1) ? 's' : '') + ' ago';
+		return Math.floor(this.inMinutes()) + ' minute' + ((Math.floor(this.inMinutes()) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Day) {
-		return Math.floor(this.inHours()) + ' hour' + ((this.inHours() > 1) ? 's' : '') + ' ago';
+		return Math.floor(this.inHours()) + ' hour' + ((Math.floor(this.inHours()) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Week) {
-		return Math.floor(this.inDays()) + ' day' + ((this.inDays() > 1) ? 's' : '') + ' ago';
+		return Math.floor(this.inDays()) + ' day' + ((Math.floor(this.inDays(()) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Month) {
-		return Math.floor(this.inWeeks()) + ' week' + ((this.inWeeks() > 1) ? 's' : '') + ' ago';
+		return Math.floor(this.inWeeks()) + ' week' + ((Math.floor(this.inWeeks()) > 1) ? 's' : '') + ' ago';
 	}
 	else if (this.seconds < this.Calendar.Seconds.per.Year) {
-		return Math.floor(this.inMonths()) + ' month' + ((this.inMonths() > 1) ? 's' : '') + ' ago';
+		return Math.floor(this.inMonths()) + ' month' + ((Math.floor(this.inMonths() > 1)) ? 's' : '') + ' ago';
 	}
 	else {
-		return Math.floor(this.inYears()) + ' year' + ((this.inYears() > 1) ? 's' : '') + ' ago';
+		return Math.floor(this.inYears()) + ' year' + (Math.floor((this.inYears() > 1)) ? 's' : '') + ' ago';
 	}
 }
 
