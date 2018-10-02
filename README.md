@@ -158,7 +158,7 @@ If you feel a burning desire to contribute to this project you may do so with so
 
 Running the Unit Tests
 -----------------------------
-Unit tests are written using the [Jasmine](http://pivotal.github.com/jasmine/) framework. You can run them however you like, but I use [Testacular](http://testacular.github.com/). If you would like to do the same, follow these steps:
+Unit tests are written using the [Jasmine](https://jasmine.github.io/) framework. You can run them however you like, but I use [Testacular](http://testacular.github.com/). If you would like to do the same, follow these steps:
 
 1.  Install [node.js](http://nodejs.org/)
 
