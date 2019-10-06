@@ -52,8 +52,11 @@ Methods
 	inMinutes()
 	inSeconds()
 
+	approx()			Get an approximate human-readable string that describes
+						the duration, such as: '15 minutes'.
+
 	ago()				Get an approximate human-readable string that describes
-						the duration, such as: '15 minutes ago'.
+						the duration in the past, such as: '15 minutes ago'.
 
 	asClock()			Get the duration represented as a digital clock that only
 						shows seconds, minutes and hours if present.

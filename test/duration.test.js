@@ -1,9 +1,10 @@
 'use strict';
 
-// uncomment the following to use the vscode
-// mocha test explorer
-// const Duration = require('../js/duration');
-// const expect = require('chai').expect;
+if (typeof require === "function") {
+	// ensure tests run in Karma and Mocha
+	global.Duration = require('../js/duration');
+	global.expect = require('chai').expect;
+}
 
 describe('Duration Test Suite', () => {
 	describe('Calendar Constants Tests', () => {
@@ -546,6 +547,66 @@ describe('Duration Test Suite', () => {
 			}
 		});
 		
+		it("returns a formatted duration in approximate terms", () => {
+			expect((new Duration(0).approx())).to.equal('right now');
+			expect((new Duration('PT0S').approx())).to.equal('right now');
+
+			expect((new Duration(1).approx())).to.equal('1 second');
+			expect((new Duration('PT1S').approx())).to.equal('1 second');
+			for (var seconds = 2; seconds < 60; seconds++) {
+				expect((new Duration(seconds).approx())).to.equal(seconds + ' seconds');
+				expect((new Duration('PT' + seconds + 'S').approx())).to.equal(seconds + ' seconds');
+			}
+
+			expect((new Duration(60).approx())).to.equal('1 minute');
+			expect((new Duration('PT1M').approx())).to.equal('1 minute');
+			expect((new Duration('PT60S').approx())).to.equal('1 minute');
+			for (var minutes = 2; minutes < 60; minutes++) {
+				expect((new Duration(minutes * 60).approx())).to.equal(minutes + ' minutes');
+				expect((new Duration('PT' + minutes + 'M').approx())).to.equal(minutes + ' minutes');
+			}
+
+			expect((new Duration(60 * 60).approx())).to.equal('1 hour');
+			expect((new Duration('PT1H').approx())).to.equal('1 hour');
+			expect((new Duration('PT60M').approx())).to.equal('1 hour');
+			for (var hours = 2; hours < 24; hours++) {
+				expect((new Duration(hours * 60 * 60).approx())).to.equal(hours + ' hours');
+				expect((new Duration('PT' + hours + 'H').approx())).to.equal(hours + ' hours');
+			}
+
+			expect((new Duration(60 * 60 * 24).approx())).to.equal('1 day');
+			expect((new Duration('P1D').approx())).to.equal('1 day');
+			expect((new Duration('PT24H').approx())).to.equal('1 day');
+			for (var days = 2; days < 7; days++) {
+				expect((new Duration(days * 60 * 60 * 24).approx())).to.equal(days + ' days');
+				expect((new Duration('P' + days + 'D').approx())).to.equal(days + ' days');
+			}
+
+			expect((new Duration(60 * 60 * 24 * 7).approx())).to.equal('1 week');
+			expect((new Duration('P1W').approx())).to.equal('1 week');
+			expect((new Duration('P7D').approx())).to.equal('1 week');
+			for (var weeks = 2; weeks < 4; weeks++) {
+				expect((new Duration(weeks * 60 * 60 * 24 * 7).approx())).to.equal(weeks + ' weeks');
+				expect((new Duration('P' + weeks + 'W').approx())).to.equal(weeks + ' weeks');
+			}
+
+			expect((new Duration('P4W')).approx()).to.equal('4 weeks');
+
+			expect((new Duration(60 * 60 * 24 * 30.4368)).approx()).to.equal('1 month');
+			expect((new Duration('P1M')).approx()).to.equal('1 month');
+			for (var months = 2; months < 12; months++) {
+				expect((new Duration(months * 60 * 60 * 24 * 30.4368).approx())).to.equal(months + ' months');
+				expect((new Duration('P' + months + 'M').approx())).to.equal(months + ' months');
+			}
+
+			expect((new Duration(60 * 60 * 24 * 365.242).approx())).to.equal('1 year');
+			expect((new Duration('P1Y').approx())).to.equal('1 year');
+			for (var years = 2; years <= 50; years++) {
+				expect((new Duration(years * 60 * 60 * 24 * 365.242).approx())).to.equal(years + ' years');
+				expect((new Duration('P' + years + 'Y').approx())).to.equal(years + ' years');
+			}
+		});
+
 		it("returns a formatted duration in terms of how much time is remaining", () => {
 			expect((new Duration()).asClock()).to.equal("0:00");
 
