@@ -119,7 +119,7 @@ Licensed under The MIT License (MIT)
 
 	Duration.prototype.Parser = {}
 
-	Duration.prototype.Parser.Extended = function(seconds, match) {
+	Duration.prototype.Parser.Extended = (seconds, match) => {
 		var cal = Duration.prototype.Calendar;
 
 		for (var groupIndex = 1; groupIndex < match.length; groupIndex++) {
@@ -163,7 +163,7 @@ Licensed under The MIT License (MIT)
 
 	Duration.prototype.Parser.Basic = Duration.prototype.Parser.Extended;
 
-	Duration.prototype.Parser.StandardWeeks = function(seconds, match) {
+	Duration.prototype.Parser.StandardWeeks = (seconds, match) => {
 		var cal = Duration.prototype.Calendar;
 
 		for (var i = 1; i < match.length; i++) {
@@ -178,7 +178,7 @@ Licensed under The MIT License (MIT)
 		return seconds;
 	}
 
-	Duration.prototype.Parser.Standard = function(seconds, match) {
+	Duration.prototype.Parser.Standard = (seconds, match) => {
 		var cal = Duration.prototype.Calendar;
 
 		if (match[0] === 'P' || match[0] === 'PT') {
@@ -239,7 +239,7 @@ Licensed under The MIT License (MIT)
 	Pad a value with leading zeros by specifying the desired length of the result string.
 		Example: padInt(2, 4) will return '0002'
 	*/
-	Duration.prototype.padInt = function(value, length) {
+	Duration.prototype.padInt = (value, length) => {
 		var valString = value + '';
 		var result = '';
 
@@ -322,31 +322,38 @@ Licensed under The MIT License (MIT)
 		return result;
 	}
 
+	Duration.prototype.approx = function() {
+		if (this.seconds == 0) {
+			return 'right now';
+		}
+		else if (this.seconds < this.Calendar.Seconds.per.Minute) {
+			return this.seconds + ' second' + ((this.seconds > 1) ? 's' : '');
+		}
+		else if (this.seconds < this.Calendar.Seconds.per.Hour) {
+			return Math.floor(this.inMinutes()) + ' minute' + ((this.inMinutes() > 1) ? 's' : '');
+		}
+		else if (this.seconds < this.Calendar.Seconds.per.Day) {
+			return Math.floor(this.inHours()) + ' hour' + ((this.inHours() > 1) ? 's' : '');
+		}
+		else if (this.seconds < this.Calendar.Seconds.per.Week) {
+			return Math.floor(this.inDays()) + ' day' + ((this.inDays() > 1) ? 's' : '');
+		}
+		else if (this.seconds < this.Calendar.Seconds.per.Month) {
+			return Math.floor(this.inWeeks()) + ' week' + ((this.inWeeks() > 1) ? 's' : '');
+		}
+		else if (this.seconds < this.Calendar.Seconds.per.Year) {
+			return Math.floor(this.inMonths()) + ' month' + ((this.inMonths() > 1) ? 's' : '');
+		}
+		else {
+			return Math.floor(this.inYears()) + ' year' + ((this.inYears() > 1) ? 's' : '');
+		}
+	}
+
 	Duration.prototype.ago = function() {
 		if (this.seconds == 0) {
 			return 'just now';
 		}
-		else if (this.seconds < this.Calendar.Seconds.per.Minute) {
-			return this.seconds + ' second' + ((this.seconds > 1) ? 's' : '') + ' ago';
-		}
-		else if (this.seconds < this.Calendar.Seconds.per.Hour) {
-			return Math.floor(this.inMinutes()) + ' minute' + ((this.inMinutes() > 1) ? 's' : '') + ' ago';
-		}
-		else if (this.seconds < this.Calendar.Seconds.per.Day) {
-			return Math.floor(this.inHours()) + ' hour' + ((this.inHours() > 1) ? 's' : '') + ' ago';
-		}
-		else if (this.seconds < this.Calendar.Seconds.per.Week) {
-			return Math.floor(this.inDays()) + ' day' + ((this.inDays() > 1) ? 's' : '') + ' ago';
-		}
-		else if (this.seconds < this.Calendar.Seconds.per.Month) {
-			return Math.floor(this.inWeeks()) + ' week' + ((this.inWeeks() > 1) ? 's' : '') + ' ago';
-		}
-		else if (this.seconds < this.Calendar.Seconds.per.Year) {
-			return Math.floor(this.inMonths()) + ' month' + ((this.inMonths() > 1) ? 's' : '') + ' ago';
-		}
-		else {
-			return Math.floor(this.inYears()) + ' year' + ((this.inYears() > 1) ? 's' : '') + ' ago';
-		}
+		return this.approx() + ' ago';
 	}
 
 	Duration.prototype.asClock = function() {
