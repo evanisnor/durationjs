@@ -8,9 +8,7 @@
     "js": "js",
     "test": "test"
   },
-  "dependencies": {
-    "jasmine-node": "^3.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "^4.2.0",
     "jasmine-core": "^3.5.0",
