@@ -1,14 +1,9 @@
 duration.js
 =============================
+
+[![Node.js CI](https://github.com/matthewturner/durationjs/actions/workflows/node.js.yml/badge.svg)](https://github.com/matthewturner/durationjs/actions/workflows/node.js.yml) [![CodeQL](https://github.com/matthewturner/durationjs/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/matthewturner/durationjs/actions/workflows/github-code-scanning/codeql)
+
 A JavaScript library for parsing and manipulating ISO 8601 formatted duration strings.
-
-Status
------------------------------
-Master:
-[![Build Status](https://travis-ci.org/leadhead9/durationjs.png?branch=master)](https://travis-ci.org/leadhead9/durationjs)
-
-Development:
-[![Build Status](https://travis-ci.org/leadhead9/durationjs.png?branch=develop)](https://travis-ci.org/leadhead9/durationjs)
 
 Features
 -----------------------------
