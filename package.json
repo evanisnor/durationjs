@@ -22,7 +22,7 @@
     "karma-mocha": "^2.0.1",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-script-launcher": "^1.0.0",
-    "mocha": "^6.2.0"
+    "mocha": "^10.2.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/karma start --single-run --browsers ChromeHeadless"
