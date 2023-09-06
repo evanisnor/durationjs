@@ -27,6 +27,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://npm.pkg.github.com'
+          scope: '@matthewturner'
       - run: npm ci
       - run: npm version --git-tag-version false ${{github.event.release.tag_name}}
       - run: npm publish
