@@ -31,7 +31,7 @@
   },
   "license": "MIT",
   "publishConfig": {
-    "@matthewturner:registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com"
   },
   "readmeFilename": "README.md"
 }
