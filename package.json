@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/leadhead9/durationjs.git"
+    "url": "git://github.com/matthewturner/durationjs.git"
   },
   "license": "MIT",
   "publishConfig": {
