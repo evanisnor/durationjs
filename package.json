@@ -1,5 +1,5 @@
 {
-  "name": "durationjs",
+  "name": "@matthewturner/durationjs",
   "version": "1.2.0",
   "description": "A JavaScript library for parsing and manipulating ISO 8601 formatted Duration strings.",
   "author": "leadhead9 <ewisnor@gmail.com>",
